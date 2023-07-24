@@ -1,0 +1,10 @@
+FROM node:16
+
+COPY ./package.json /karuru/
+COPY ./yarn.lock /karuru/
+WORKDIR /karuru/
+RUN yarn install
+
+COPY . /karuru/
+
+CMD yarn start:dev
