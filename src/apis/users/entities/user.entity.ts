@@ -16,6 +16,9 @@ export class User {
   introduction: string;
 
   @Column()
+  password: string;
+
+  @Column()
   phoneNum: string;
 
   @Column({ type: 'enum', enum: USER_TYPE_ENUM })
