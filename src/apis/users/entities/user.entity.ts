@@ -41,33 +41,33 @@ export class User {
   phoneNum: string;
 
   @ApiProperty({
-    example: 'PARENTS',
-    description: 'PARENTS: 부모 회원, SITTER: 시니어시터 회원',
+    example: USER_TYPE_ENUM.PARENTS,
+    description: '회원 유형 (PARENTS: 부모 회원, SITTER: 시니어시터 회원)',
     required: true,
-    type: 'enum',
+    enum: USER_TYPE_ENUM,
   })
   @Column({ type: 'enum', enum: USER_TYPE_ENUM })
-  userType: string;
+  userType: USER_TYPE_ENUM;
 
   @ApiProperty({
-    example: 'ONETIME',
+    example: CARE_TYPE_ENUM.ONETIME,
     description:
-      'GOBACK: 등하원 돌봄, SICKCHILD: 아픈아이 돌봄, ONETIME: 일회성 돌봄, ACTIVITYSUPPORT: 모임활동 지원',
+      '돌봄 유형 (GOBACK: 등하원 돌봄, SICKCHILD: 아픈아이 돌봄, ONETIME: 일회성 돌봄, ACTIVITYSUPPORT: 모임활동 지원)',
     required: true,
-    type: 'enum',
+    enum: CARE_TYPE_ENUM,
   })
   @Column({ type: 'enum', enum: CARE_TYPE_ENUM })
-  careType: string;
+  careType: CARE_TYPE_ENUM;
 
   @ApiProperty({
-    example: 'INFANONETIMET',
+    example: CHILD_TYPE_ENUM.INFANT,
     description:
-      'INFANONETIMET: 신생아, INFANT: 영아, KID: 유아, ELEMENTARY: 초등학생',
+      '아이 유형 (INFANONETIMET: 신생아, INFANT: 영아, KID: 유아, ELEMENTARY: 초등학생)',
     required: true,
-    type: 'enum',
+    enum: CHILD_TYPE_ENUM,
   })
   @Column({ type: 'enum', enum: CHILD_TYPE_ENUM })
-  childType: string;
+  childType: CHILD_TYPE_ENUM;
 
   @ApiProperty({
     example: 'profile: { id: 0dc011aa-d76e-11ed-afa1-0242ac120002 }',
