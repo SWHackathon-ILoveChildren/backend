@@ -6,6 +6,7 @@ import { User } from './entities/user.entity';
 import { ChildrenModule } from '../children/children.module';
 import { GuModule } from '../gu/gu.module';
 import { WantedGuModule } from '../wantedGu/watnedGu.module';
+import { CareTypeModule } from '../careType/careTypes.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { WantedGuModule } from '../wantedGu/watnedGu.module';
     ChildrenModule,
     GuModule,
     WantedGuModule,
+    CareTypeModule,
   ],
   providers: [UsersService],
   controllers: [UsersController],

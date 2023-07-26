@@ -11,6 +11,7 @@ import { Profile } from 'src/apis/profiles/entities/profile.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID, IsNotEmpty, IsString, IsEnum } from 'class-validator';
 import { Children } from 'src/apis/children/entities/children.entity';
+import { CareType } from 'src/apis/careType/entities/careType.entity';
 
 @Entity()
 export class User {
@@ -66,13 +67,6 @@ export class User {
   userType: USER_TYPE_ENUM;
 
   @ApiProperty({
-    example: '등하원 돌봄',
-    required: true,
-  })
-  @Column()
-  careType: string;
-
-  @ApiProperty({
     example: CHILD_TYPE_ENUM.INFANT,
     description:
       '아이 유형 (INFANONETIMET: 신생아, INFANT: 영아, KID: 유아, ELEMENTARY: 초등학생)',
@@ -95,4 +89,12 @@ export class User {
   })
   @OneToMany(() => Children, (childrens) => childrens.user)
   childrens: Children[];
+
+  @ApiProperty({
+    example:
+      'careTypes: [{ name: 등하원 돌봄, user:{ id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }, id: 0ab0d27a-2d34-4bda-a936-29454f014612 }, { 아픈아이 돌봄: 200003, user: { id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }, id: 889675ad-e3fe-4fe1-ad0d-6b06f5447f41 }]',
+    required: true,
+  })
+  @OneToMany(() => CareType, (careTypes) => careTypes.user)
+  careTypes: CareType[];
 }

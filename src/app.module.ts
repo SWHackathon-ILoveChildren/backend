@@ -7,9 +7,11 @@ import { UsersModule } from './apis/users/users.module';
 import { ChildrenModule } from './apis/children/children.module';
 import { GuModule } from './apis/gu/gu.module';
 import { WantedGuModule } from './apis/wantedGu/watnedGu.module';
+import { CareTypeModule } from './apis/careType/careTypes.module';
 
 @Module({
   imports: [
+    CareTypeModule,
     ChildrenModule,
     GuModule,
     UsersModule,
