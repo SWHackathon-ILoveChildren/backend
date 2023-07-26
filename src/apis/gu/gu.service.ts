@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Gu } from 'src/apis/gu/entities/gu.entity';
+import { CreateGuDto } from './dto/createGu.dto';
 
 @Injectable()
 export class GuService {
@@ -16,5 +17,9 @@ export class GuService {
         name: wantedGuName,
       },
     });
+  }
+
+  async create(createGuDto: CreateGuDto): Promise<Gu> {
+    return await this.guRepository.save({ ...createGuDto });
   }
 }
