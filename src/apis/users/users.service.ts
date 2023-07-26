@@ -7,6 +7,7 @@ import { USER_TYPE_ENUM } from './types/user.type';
 import { ChildrenService } from '../children/children.service';
 import { GuService } from '../gu/gu.service';
 import { WantedGuService } from '../wantedGu/watnedGu.service';
+import { CaresService } from '../careType/careTypes.service';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +17,8 @@ export class UsersService {
 
     private childrenService: ChildrenService,
     private guService: GuService,
-    private wantedGuService: WantedGuService
+    private wantedGuService: WantedGuService,
+    private caresService: CaresService
   ) {}
 
   async findOneByPhoneNum({ phoneNum }) {
@@ -36,6 +38,7 @@ export class UsersService {
       ...rest
     } = createUserDto;
     let parentsChildren = null;
+    let parentsCareType = null;
 
     const userCheck = await this.findOneByPhoneNum({ phoneNum });
     if (userCheck) throw new ConflictException('이미 등록된 이메일입니다.');
@@ -50,6 +53,13 @@ export class UsersService {
       password: hashedPassword,
       userType,
     });
+
+    if (careTypes.length > 0) {
+      parentsCareType = await this.caresService.addCareType({
+        careTypes,
+        userId: user.id,
+      });
+    }
 
     // 부모 회원 아이 추가 로직
     if (userType === 'PARENTS') {
@@ -71,7 +81,6 @@ export class UsersService {
 
     return await this.usersRepository.save({
       ...user,
-      parentsChildren,
     });
   }
 
