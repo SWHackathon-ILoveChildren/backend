@@ -24,12 +24,11 @@ export class User {
 
   @ApiProperty({
     example: '김미나',
-    required: true,
+    required: false,
   })
-  @IsNotEmpty()
   @IsString()
-  @Column()
-  name: string;
+  @Column({ nullable: true })
+  name?: string;
 
   @ApiProperty({
     example: '안녕하세요. 2살 남아 엄마 김미나입니다.',

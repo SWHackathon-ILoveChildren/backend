@@ -4,6 +4,7 @@ import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class CreateUserDto extends OmitType(User, [
   'id',
+  'name',
   'profile',
   'childrens',
 ] as const) {
