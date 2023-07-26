@@ -1,10 +1,17 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { USER_TYPE_ENUM } from '../types/user.type';
 import { CARE_TYPE_ENUM } from '../types/care.type';
 import { CHILD_TYPE_ENUM } from '../types/child.type';
 import { Profile } from 'src/apis/profiles/entities/profile.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID, IsNotEmpty, IsString, IsEnum } from 'class-validator';
+import { Children } from 'src/apis/children/entities/children.entity';
 
 @Entity()
 export class User {
@@ -86,4 +93,11 @@ export class User {
   })
   @OneToOne(() => Profile)
   profile?: Profile;
+
+  @ApiProperty({
+    example:
+      'childrens: [{ birth: 199801, user:{ id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }, id: 0ab0d27a-2d34-4bda-a936-29454f014612 }, { birth: 200003, user: { id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }, id: 889675ad-e3fe-4fe1-ad0d-6b06f5447f41 }]',
+  })
+  @OneToMany(() => Children, (childrens) => childrens.user)
+  childrens: Children[];
 }

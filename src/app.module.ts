@@ -4,9 +4,11 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './apis/users/users.module';
+import { ChildrenModule } from './apis/children/children.module';
 
 @Module({
   imports: [
+    ChildrenModule,
     UsersModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({

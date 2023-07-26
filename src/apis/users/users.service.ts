@@ -5,12 +5,15 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { USER_TYPE_ENUM } from './types/user.type';
 import { CARE_TYPE_ENUM } from './types/care.type';
+import { ChildrenService } from '../children/children.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>
+    private usersRepository: Repository<User>,
+
+    private childrenService: ChildrenService
   ) {}
 
   async findOneByPhoneNum({ phoneNum }) {
@@ -20,8 +23,9 @@ export class UsersService {
   }
 
   async createParent(createUserDto) {
-    const { phoneNum, password, userType, careType, childType, ...user } =
+    const { phoneNum, password, userType, careType, childrenBirths, ...rest } =
       createUserDto;
+    let parentsChildren = null;
 
     const userCheck = await this.findOneByPhoneNum({ phoneNum });
     if (userCheck) throw new ConflictException('이미 등록된 이메일입니다.');
@@ -31,16 +35,27 @@ export class UsersService {
     this.isValidUserType({ userType });
     this.isValidCareType({ careType });
 
-    // 부모 회원 아이 추가 로직
-    // if (userType === 'PARENTS') {
-    //   this.child
-    // }
-    this.isValidChildType({ childType });
-
-    return this.usersRepository.save({
-      ...user,
+    const user = await this.usersRepository.save({
+      ...rest,
       phoneNum,
       password: hashedPassword,
+      userType,
+      careType,
+    });
+
+    // 부모 회원 아이 추가 로직
+    if (userType === 'PARENTS') {
+      if (childrenBirths.length > 0) {
+        parentsChildren = await this.childrenService.addChildren({
+          childrenBirths,
+          userId: user.id,
+        });
+      }
+    }
+
+    return await this.usersRepository.save({
+      ...user,
+      parentsChildren,
     });
   }
 
