@@ -79,7 +79,6 @@ export class UsersService {
       });
     }
 
-    console.log('!1111111');
     return await this.usersRepository.save({
       ...user,
       parentsChildren,
