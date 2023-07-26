@@ -9,9 +9,9 @@ import { CreateParentsUsers } from './interfaces/users.interface';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Post()
+  @Post('parents')
   @ApiOperation({
-    summary: '유저 생성 API',
+    summary: '부모 유저 생성 API',
   })
   @ApiResponse({
     status: 201,
