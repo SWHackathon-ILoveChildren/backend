@@ -19,7 +19,7 @@ export class GuController {
     type: Gu,
   })
   @ApiResponse({
-    status: 409,
+    status: 422,
     description: '생성 실패',
   })
   createGu(@Body() createGuDto: CreateGuDto): Promise<Gu> {
