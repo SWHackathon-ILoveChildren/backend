@@ -15,4 +15,12 @@ export class CreateUserDto extends OmitType(User, [
   @IsArray()
   @IsString({ each: true })
   childrenBirths: string[];
+
+  @ApiProperty({
+    example: '강남구',
+  })
+  @IsOptional()
+  @IsString()
+  @IsString({ each: true })
+  wantedGuName: string;
 }

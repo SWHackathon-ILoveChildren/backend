@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { USER_TYPE_ENUM } from './types/user.type';
 import { CARE_TYPE_ENUM } from './types/care.type';
 import { ChildrenService } from '../children/children.service';
+import { GuService } from '../gu/gu.service';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +14,8 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
 
-    private childrenService: ChildrenService
+    private childrenService: ChildrenService,
+    private GuService: GuService
   ) {}
 
   async findOneByPhoneNum({ phoneNum }) {
@@ -23,8 +25,15 @@ export class UsersService {
   }
 
   async createParent(createUserDto) {
-    const { phoneNum, password, userType, careType, childrenBirths, ...rest } =
-      createUserDto;
+    const {
+      phoneNum,
+      password,
+      userType,
+      careType,
+      childrenBirths,
+      wantedGuName,
+      ...rest
+    } = createUserDto;
     let parentsChildren = null;
 
     const userCheck = await this.findOneByPhoneNum({ phoneNum });
@@ -51,12 +60,16 @@ export class UsersService {
           userId: user.id,
         });
       }
+
+      // 돌봄 지역
+      const wantedGu = await this.GuService.findByWantedGuName(wantedGuName);
+      console.log(wantedGu);
     }
 
-    return await this.usersRepository.save({
-      ...user,
-      parentsChildren,
-    });
+    // return await this.usersRepository.save({
+    //   ...user,
+    //   parentsChildren,
+    // });
   }
 
   // 유저 타입 검증

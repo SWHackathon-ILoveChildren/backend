@@ -5,10 +5,12 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './apis/users/users.module';
 import { ChildrenModule } from './apis/children/children.module';
+import { GuModule } from './apis/gu/gu.module';
 
 @Module({
   imports: [
     ChildrenModule,
+    GuModule,
     UsersModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
