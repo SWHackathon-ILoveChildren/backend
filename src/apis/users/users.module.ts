@@ -5,9 +5,15 @@ import { UsersController } from './users.controller';
 import { User } from './entities/user.entity';
 import { ChildrenModule } from '../children/children.module';
 import { GuModule } from '../gu/gu.module';
+import { WantedGuModule } from '../wantedGu/watnedGu.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), ChildrenModule, GuModule],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    ChildrenModule,
+    GuModule,
+    WantedGuModule,
+  ],
   providers: [UsersService],
   controllers: [UsersController],
 })

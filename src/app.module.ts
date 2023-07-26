@@ -6,12 +6,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './apis/users/users.module';
 import { ChildrenModule } from './apis/children/children.module';
 import { GuModule } from './apis/gu/gu.module';
+import { WantedGuModule } from './apis/wantedGu/watnedGu.module';
 
 @Module({
   imports: [
     ChildrenModule,
     GuModule,
     UsersModule,
+    WantedGuModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',

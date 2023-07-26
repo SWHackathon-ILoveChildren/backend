@@ -7,6 +7,7 @@ import { USER_TYPE_ENUM } from './types/user.type';
 import { CARE_TYPE_ENUM } from './types/care.type';
 import { ChildrenService } from '../children/children.service';
 import { GuService } from '../gu/gu.service';
+import { WantedGuService } from '../wantedGu/watnedGu.service';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +16,8 @@ export class UsersService {
     private usersRepository: Repository<User>,
 
     private childrenService: ChildrenService,
-    private GuService: GuService
+    private guService: GuService,
+    private wantedGuService: WantedGuService
   ) {}
 
   async findOneByPhoneNum({ phoneNum }) {
@@ -61,15 +63,19 @@ export class UsersService {
         });
       }
 
-      // 돌봄 지역
-      const wantedGu = await this.GuService.findByWantedGuName(wantedGuName);
-      console.log(wantedGu);
+      // 부모 회원 돌봄 받길 원하는 지역
+      const wantedGu = await this.guService.findByWantedGuName(wantedGuName);
+
+      await this.wantedGuService.addWantedGu({
+        guId: wantedGu.id,
+        userId: user.id,
+      });
     }
 
-    // return await this.usersRepository.save({
-    //   ...user,
-    //   parentsChildren,
-    // });
+    return await this.usersRepository.save({
+      ...user,
+      parentsChildren,
+    });
   }
 
   // 유저 타입 검증
