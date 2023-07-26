@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/createUser.dto';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { CreateParentsUsers } from './interfaces/users.interface';
 
 @Controller('users')
 export class UsersController {
@@ -15,7 +16,7 @@ export class UsersController {
   @ApiResponse({
     status: 201,
     description: '생성 성공',
-    type: User,
+    type: CreateParentsUsers,
   })
   @ApiResponse({
     status: 409,

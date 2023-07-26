@@ -9,6 +9,7 @@ export class CreateUserDto extends OmitType(User, [
   'careTypes',
   'childType',
   'childrens',
+  'wantedGues',
 ] as const) {
   @ApiProperty({
     type: '[string]',

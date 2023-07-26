@@ -12,6 +12,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID, IsNotEmpty, IsString, IsEnum } from 'class-validator';
 import { Children } from 'src/apis/children/entities/children.entity';
 import { CareType } from 'src/apis/careType/entities/careType.entity';
+import { WantedGu } from 'src/apis/wantedGu/entities/wantedGu.entity';
 
 @Entity()
 export class User {
@@ -97,4 +98,11 @@ export class User {
   })
   @OneToMany(() => CareType, (careTypes) => careTypes.user)
   careTypes: CareType[];
+
+  @ApiProperty({
+    example:
+      'wantedGues: [{ id: 0ab0d27a-2d34-4bda-a936-29454f014612, user:{ id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }, gu: { id: 1 }}, { id: 889675ad-e3fe-4fe1-ad0d-6b06f5447f41, user: { id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }, gu: { id: 2 }}]',
+  })
+  @OneToMany(() => WantedGu, (wantedGues) => wantedGues.user)
+  wantedGues: WantedGu[];
 }
