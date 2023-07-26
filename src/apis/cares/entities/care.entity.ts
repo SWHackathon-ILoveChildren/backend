@@ -1,4 +1,4 @@
-import { Children } from 'src/apis/childen/entities/children.entity';
+import { Children } from 'src/apis/children/entities/children.entity';
 import { Profile } from 'src/apis/profiles/entities/profile.entity';
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
