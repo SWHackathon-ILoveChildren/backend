@@ -2,7 +2,7 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { User } from '../entities/user.entity';
 import { IsArray, IsOptional, IsString } from 'class-validator';
 
-export class CreateUserDto extends OmitType(User, [
+export class CreateParentsDto extends OmitType(User, [
   'id',
   'name',
   'profile',

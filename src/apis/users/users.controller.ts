@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { CreateUserDto } from './dto/createUser.dto';
+import { CreateParentsDto } from './dto/createParents.dto';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
@@ -22,7 +22,7 @@ export class UsersController {
     status: 409,
     description: '생성 실패',
   })
-  createParent(@Body() createUserDto: CreateUserDto) {
+  createParent(@Body() createUserDto: CreateParentsDto) {
     return this.usersService.createParent(createUserDto);
   }
 }
