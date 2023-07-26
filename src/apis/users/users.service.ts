@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { USER_TYPE_ENUM } from './types/user.type';
-import { CARE_TYPE_ENUM } from './types/care.type';
 import { ChildrenService } from '../children/children.service';
 import { GuService } from '../gu/gu.service';
 import { WantedGuService } from '../wantedGu/watnedGu.service';
@@ -31,7 +30,7 @@ export class UsersService {
       phoneNum,
       password,
       userType,
-      careType,
+      careTypes,
       childrenBirths,
       wantedGuName,
       ...rest
@@ -44,14 +43,12 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     this.isValidUserType({ userType });
-    this.isValidCareType({ careType });
 
     const user = await this.usersRepository.save({
       ...rest,
       phoneNum,
       password: hashedPassword,
       userType,
-      careType,
     });
 
     // 부모 회원 아이 추가 로직
@@ -84,21 +81,5 @@ export class UsersService {
 
     if (!typeCheck)
       throw new ConflictException('유효하지 않은 유저 타입입니다.');
-  }
-
-  // 돌봄 타입 검증
-  isValidCareType({ careType }) {
-    const careCheck = Object.values(CARE_TYPE_ENUM).includes(careType);
-
-    if (!careCheck)
-      throw new ConflictException('유효하지 않은 돌봄 타입입니다.');
-  }
-
-  // 아이 타입 검증
-  isValidChildType({ childType }) {
-    const childCheck = Object.values(CARE_TYPE_ENUM).includes(childType);
-
-    if (!childCheck)
-      throw new ConflictException('유효하지 않은 아이 타입입니다.');
   }
 }

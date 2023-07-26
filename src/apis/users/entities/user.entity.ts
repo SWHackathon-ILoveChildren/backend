@@ -6,7 +6,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { USER_TYPE_ENUM } from '../types/user.type';
-import { CARE_TYPE_ENUM } from '../types/care.type';
 import { CHILD_TYPE_ENUM } from '../types/child.type';
 import { Profile } from 'src/apis/profiles/entities/profile.entity';
 import { ApiProperty } from '@nestjs/swagger';
@@ -67,14 +66,11 @@ export class User {
   userType: USER_TYPE_ENUM;
 
   @ApiProperty({
-    example: CARE_TYPE_ENUM.ONETIME,
-    description:
-      '돌봄 유형 (GOBACK: 등하원 돌봄, SICKCHILD: 아픈아이 돌봄, ONETIME: 일회성 돌봄, ACTIVITYSUPPORT: 모임활동 지원)',
+    example: '등하원 돌봄',
     required: true,
-    enum: CARE_TYPE_ENUM,
   })
-  @Column({ type: 'enum', enum: CARE_TYPE_ENUM })
-  careType: CARE_TYPE_ENUM;
+  @Column()
+  careType: string;
 
   @ApiProperty({
     example: CHILD_TYPE_ENUM.INFANT,
