@@ -32,6 +32,9 @@ export class UsersService {
     this.isValidCareType({ careType });
 
     // 부모 회원 아이 추가 로직
+    // if (userType === 'PARENTS') {
+    //   this.child
+    // }
     this.isValidChildType({ childType });
 
     return this.usersRepository.save({
