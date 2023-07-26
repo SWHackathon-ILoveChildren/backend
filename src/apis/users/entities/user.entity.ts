@@ -4,12 +4,14 @@ import { CARE_TYPE_ENUM } from '../types/care.type';
 import { CHILD_TYPE_ENUM } from '../types/child.type';
 import { Profile } from 'src/apis/profiles/entities/profile.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsUUID, IsNotEmpty, IsString, IsEnum } from 'class-validator';
 
 @Entity()
 export class User {
   @ApiProperty({
     example: '0dc011aa-d76e-11ed-afa1-0242ac120002',
   })
+  @IsUUID()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -17,12 +19,15 @@ export class User {
     example: '김미나',
     required: true,
   })
+  @IsNotEmpty()
+  @IsString()
   @Column()
   name: string;
 
   @ApiProperty({
     example: '안녕하세요. 2살 남아 엄마 김미나입니다.',
   })
+  @IsString()
   @Column()
   introduction: string;
 
@@ -30,6 +35,8 @@ export class User {
     example: 'abc123',
     required: true,
   })
+  @IsNotEmpty()
+  @IsString()
   @Column()
   password: string;
 
@@ -37,6 +44,8 @@ export class User {
     example: '01012345678',
     required: true,
   })
+  @IsNotEmpty()
+  @IsString()
   @Column()
   phoneNum: string;
 
@@ -46,6 +55,8 @@ export class User {
     required: true,
     enum: USER_TYPE_ENUM,
   })
+  @IsNotEmpty()
+  @IsEnum(USER_TYPE_ENUM)
   @Column({ type: 'enum', enum: USER_TYPE_ENUM })
   userType: USER_TYPE_ENUM;
 
