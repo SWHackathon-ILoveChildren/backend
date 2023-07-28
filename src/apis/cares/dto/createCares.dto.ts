@@ -13,5 +13,5 @@ export class CreateCaresDto extends PickType(Care, [
   })
   @IsUUID()
   @IsNotEmpty()
-  childId: string;
+  childrenId: string;
 }

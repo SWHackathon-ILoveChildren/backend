@@ -6,7 +6,10 @@ export class CaresService {
   constructor(private usersService: UsersService) {}
 
   async create({ userId, ...createCaresDto }) {
+    const { childrenId, ...rest } = createCaresDto;
+
     const user = await this.usersService.findOneById({ userId });
-    console.log(user);
+
+    // const children = await this.
   }
 }
