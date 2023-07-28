@@ -26,15 +26,15 @@ export class UsersService {
     private caresService: CaresService
   ) {}
 
-  async findOneById({ userId }) {
-    const user = await this.usersRepository.findOne({
-      where: { id: userId },
+  async parentsUserFindOneById({ parentsUserId }) {
+    const parentsUser = await this.usersRepository.findOne({
+      where: { id: parentsUserId },
     });
 
-    if (!user)
+    if (!parentsUser)
       throw new UnprocessableEntityException('존재하지 않는 유저입니다.');
 
-    return user;
+    return parentsUser;
   }
 
   findOneByPhoneNum({ phoneNum }) {
