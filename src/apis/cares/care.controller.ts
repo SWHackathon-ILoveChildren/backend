@@ -22,9 +22,9 @@ export class CaresController {
     description: '생성 실패',
   })
   createCare(
-    @Param('userId', ParseUUIDPipe) userId: string, //
+    @Param('parentsUserId', ParseUUIDPipe) parentsUserId: string, //
     @Body() createCaresDto: CreateCaresDto
   ) {
-    return this.careservice.create({ userId, ...createCaresDto });
+    return this.careservice.create({ parentsUserId, ...createCaresDto });
   }
 }

@@ -13,5 +13,13 @@ export class CreateCaresDto extends PickType(Care, [
   })
   @IsUUID()
   @IsNotEmpty()
+  sitterUserId: string;
+
+  @ApiProperty({
+    example: '0dc011aa-d76e-11ed-afa1-0242ac120002',
+    required: true,
+  })
+  @IsUUID()
+  @IsNotEmpty()
   childrenId: string;
 }
