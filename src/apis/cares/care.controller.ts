@@ -1,12 +1,14 @@
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Care } from './entities/care.entity';
 import { CaresService } from './care.service';
+import { CreateCaresDto } from './dto/createCares.dto';
 
 @Controller('cares')
 export class CaresController {
   constructor(private careservice: CaresService) {}
-  @Post()
+
+  @Post(':userId')
   @ApiOperation({
     summary: '돌봄 신청 API',
   })
@@ -19,7 +21,10 @@ export class CaresController {
     status: 422,
     description: '생성 실패',
   })
-  applyCare() {
-    return this.careservice.apply();
+  createCare(
+    @Param('userId', ParseUUIDPipe) userId: string, //
+    @Body() createCaresDto: CreateCaresDto
+  ) {
+    return this.careservice.create({ userId, ...createCaresDto });
   }
 }
