@@ -40,6 +40,7 @@ export class UsersService {
   async sitterUserFindOneById({ sitterUserId }) {
     const sitterUser = await this.usersRepository.findOne({
       where: { id: sitterUserId },
+      relations: ['cares'],
     });
 
     if (!sitterUser)

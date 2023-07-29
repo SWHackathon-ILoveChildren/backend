@@ -17,7 +17,7 @@ export class CaresService {
   ) {}
 
   async create({ parentsUserId, ...createCaresDto }) {
-    const { childrenId, sitterUserId, ...rest } = createCaresDto;
+    const { date, childrenId, sitterUserId, ...rest } = createCaresDto;
 
     const parentsUser = await this.usersService.parentsUserFindOneById({
       parentsUserId,
@@ -25,6 +25,12 @@ export class CaresService {
 
     const sitterUser = await this.usersService.sitterUserFindOneById({
       sitterUserId,
+    });
+    sitterUser.cares.map((care) => {
+      if (care.date === date)
+        throw new UnprocessableEntityException(
+          `${date} 날짜에는 돌봄 신청을 할 수 없습니다. 다른 날짜에 돌봄 신청을 해주세요.  `
+        );
     });
 
     const children = await this.childrensService.findOneById({ childrenId });
@@ -39,6 +45,7 @@ export class CaresService {
     ) {
       await this.caresRepository.save({
         ...rest,
+        date,
         careStatus: STATUS_TYPE_ENUM.SCHEDULE,
         children,
         parentsUser,

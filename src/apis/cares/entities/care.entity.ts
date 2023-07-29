@@ -73,12 +73,14 @@ export class Care {
   children: Children;
 
   @ApiProperty({
+    type: () => User,
     example: 'user: { id: 0dc011aa-d76e-11ed-afa1-0242ac120002 }',
   })
   @ManyToOne(() => User)
   parentsUser: User;
 
   @ApiProperty({
+    type: () => User,
     example: 'user: { id: 0dc011aa-d76e-11ed-afa1-0242ac120002 }',
   })
   @ManyToOne(() => User)
