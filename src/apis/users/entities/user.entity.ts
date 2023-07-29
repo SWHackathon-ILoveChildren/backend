@@ -72,10 +72,10 @@ export class User {
     example: CHILD_TYPE_ENUM.INFANT,
     description:
       '아이 유형 (INFANONETIMET: 신생아, INFANT: 영아, KID: 유아, ELEMENTARY: 초등학생)',
-    required: true,
+    required: false,
     enum: CHILD_TYPE_ENUM,
   })
-  @Column({ type: 'enum', enum: CHILD_TYPE_ENUM })
+  @Column({ type: 'enum', enum: CHILD_TYPE_ENUM, nullable: true })
   childType: CHILD_TYPE_ENUM;
 
   @ApiProperty({
