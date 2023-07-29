@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -26,31 +22,8 @@ export class UsersService {
     private caresService: CaresService
   ) {}
 
-  async parentsUserFindOneById({ parentsUserId }) {
-    const parentsUser = await this.usersRepository.findOne({
-      where: { id: parentsUserId },
-    });
-
-    if (!parentsUser)
-      throw new UnprocessableEntityException('존재하지 않는 유저입니다.');
-
-    return parentsUser;
-  }
-
-  async sitterUserFindOneById({ sitterUserId }) {
-    const sitterUser = await this.usersRepository.findOne({
-      where: { id: sitterUserId },
-      relations: ['cares'],
-    });
-
-    if (!sitterUser)
-      throw new UnprocessableEntityException('존재하지 않는 유저입니다.');
-
-    return sitterUser;
-  }
-
-  findOneByPhoneNum({ phoneNum }) {
-    return this.usersRepository.findOne({
+  async findOneByPhoneNum({ phoneNum }) {
+    return await this.usersRepository.findOne({
       where: { phoneNum },
     });
   }

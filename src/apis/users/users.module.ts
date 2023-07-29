@@ -18,6 +18,5 @@ import { CareTypeModule } from '../careType/careTypes.module';
   ],
   providers: [UsersService],
   controllers: [UsersController],
-  exports: [UsersService],
 })
 export class UsersModule {}

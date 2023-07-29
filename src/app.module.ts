@@ -8,11 +8,9 @@ import { ChildrenModule } from './apis/children/children.module';
 import { GuModule } from './apis/gu/gu.module';
 import { WantedGuModule } from './apis/wantedGu/watnedGu.module';
 import { CareTypeModule } from './apis/careType/careTypes.module';
-import { CaresModule } from './apis/cares/care.module';
 
 @Module({
   imports: [
-    CaresModule,
     CareTypeModule,
     ChildrenModule,
     GuModule,
