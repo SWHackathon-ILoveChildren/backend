@@ -1,13 +1,14 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { CreateParentsDto } from './createParents.dto';
 import { CHILD_TYPE_ENUM } from '../types/child.type';
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { USER_TYPE_ENUM } from '../types/user.type';
 
-export class CreateSittersDto extends OmitType(CreateParentsDto, [
-  'userType',
-  'introduction',
-  'childrenBirths',
+export class CreateSittersDto extends PickType(CreateParentsDto, [
+  'phoneNum',
+  'password',
+  'careTypes',
+  'wantedGuName',
 ] as const) {
   @ApiProperty({
     example: '안녕하세요. 시니어 시터 홍길동입니다.',
