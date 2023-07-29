@@ -49,8 +49,8 @@ export class UsersService {
     return sitterUser;
   }
 
-  findOneByPhoneNum({ phoneNum }) {
-    return this.usersRepository.findOne({
+  async findOneByPhoneNum({ phoneNum }) {
+    return await this.usersRepository.findOne({
       where: { phoneNum },
     });
   }
