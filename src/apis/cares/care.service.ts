@@ -43,7 +43,7 @@ export class CaresService {
       parentsUser.userType === 'PARENTS' &&
       sitterUser.userType === 'SITTER'
     ) {
-      await this.caresRepository.save({
+      return await this.caresRepository.save({
         ...rest,
         date,
         careStatus: STATUS_TYPE_ENUM.SCHEDULE,
