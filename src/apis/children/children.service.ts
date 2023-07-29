@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Children } from './entities/children.entity';
 import { Repository } from 'typeorm';
@@ -10,6 +10,18 @@ export class ChildrenService {
     @InjectRepository(Children)
     private childrenRepository: Repository<Children>
   ) {}
+
+  async findOneById({ childrenId }) {
+    const children = await this.childrenRepository.findOne({
+      where: { id: childrenId },
+      relations: ['user'],
+    });
+
+    if (!children)
+      throw new UnprocessableEntityException('존재하지 않는 유저입니다.');
+
+    return children;
+  }
 
   async addChildren({
     childrenBirths,
