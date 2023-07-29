@@ -19,17 +19,21 @@ export class CaresService {
   async create({ parentsUserId, ...createCaresDto }) {
     const { childrenId, ...rest } = createCaresDto;
 
-    const parentsUse = await this.usersService.findOneById({ parentsUserId });
+    const parentsUser = await this.usersService.parentsUserFindOneById({
+      parentsUserId,
+    });
 
+    // const sitterUser = await this.usersService.
     const children = await this.childrensService.findOneById({ childrenId });
 
-    // if (user.userType === 'PARENTS') {
-    //   await this.caresRepository.save({
-    //     ...rest,
-    //     careStatus: STATUS_TYPE_ENUM.SCHEDULE,
-    //     children,
-    //     user,
-    //   });
-    // }
+    if (parentsUser.userType === 'PARENTS') {
+      // await this.caresRepository.save({
+      //   ...rest,
+      //   careStatus: STATUS_TYPE_ENUM.SCHEDULE,
+      //   children,
+      //   parentsUser,
+      //   sitterUser:
+      // });
+    }
   }
 }

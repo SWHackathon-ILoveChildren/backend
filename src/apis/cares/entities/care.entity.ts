@@ -76,5 +76,11 @@ export class Care {
     example: 'user: { id: 0dc011aa-d76e-11ed-afa1-0242ac120002 }',
   })
   @ManyToOne(() => User)
-  user: User;
+  parentsUser: User;
+
+  @ApiProperty({
+    example: 'user: { id: 0dc011aa-d76e-11ed-afa1-0242ac120002 }',
+  })
+  @ManyToOne(() => User)
+  sitterUser: User;
 }

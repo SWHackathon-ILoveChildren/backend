@@ -37,6 +37,17 @@ export class UsersService {
     return parentsUser;
   }
 
+  async sitterUserFindOneById({ sitterUserId }) {
+    const sitterUser = await this.usersRepository.findOne({
+      where: { id: sitterUserId },
+    });
+
+    if (!sitterUser)
+      throw new UnprocessableEntityException('존재하지 않는 유저입니다.');
+
+    return sitterUser;
+  }
+
   findOneByPhoneNum({ phoneNum }) {
     return this.usersRepository.findOne({
       where: { phoneNum },
