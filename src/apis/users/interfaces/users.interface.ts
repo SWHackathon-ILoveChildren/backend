@@ -1,12 +1,14 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiProperty, PickType, OmitType } from '@nestjs/swagger';
 import { User } from '../entities/user.entity';
 
-export class CreateParentsUsers extends OmitType(User, [
+export class CreateParentsUsers extends PickType(User, [
+  'id',
+  'name',
+  'phoneNum',
+  'password',
+  'introduction',
+  'userType',
   'childType',
-  'profile',
-  'childrens',
-  'careTypes',
-  'wantedGues',
 ] as const) {}
 
 export class CreateSitterUsers extends OmitType(CreateParentsUsers, [

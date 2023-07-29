@@ -83,6 +83,7 @@ export class UsersService {
       userType,
     });
 
+    // 부모 회원이 원하는 돌봄 타입 저장 로직
     if (careTypes.length > 0) {
       parentsCareType = await this.caresService.addCareType({
         careTypes,
@@ -91,26 +92,21 @@ export class UsersService {
     }
 
     // 부모 회원 아이 추가 로직
-    if (userType === 'PARENTS') {
-      if (childrenBirths.length > 0) {
-        parentsChildren = await this.childrenService.addChildren({
-          childrenBirths,
-          userId: user.id,
-        });
-      }
-
-      // 부모 회원 돌봄 받길 원하는 지역
-      const wantedGu = await this.guService.findByWantedGuName(wantedGuName);
-
-      await this.wantedGuService.addWantedGu({
-        guId: wantedGu.id,
+    if (childrenBirths.length > 0) {
+      parentsChildren = await this.childrenService.addChildren({
+        childrenBirths,
         userId: user.id,
       });
     }
 
-    return await this.usersRepository.save({
-      ...user,
+    // 부모 회원 돌봄 받길 원하는 지역
+    const wantedGu = await this.guService.findByWantedGuName(wantedGuName);
+    await this.wantedGuService.addWantedGu({
+      guId: wantedGu.id,
+      userId: user.id,
     });
+
+    return user;
   }
 
   async createSitter(createSittersDto) {

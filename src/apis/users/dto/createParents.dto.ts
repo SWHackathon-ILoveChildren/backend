@@ -1,15 +1,12 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { User } from '../entities/user.entity';
 import { IsArray, IsOptional, IsString } from 'class-validator';
 
-export class CreateParentsDto extends OmitType(User, [
-  'id',
-  'name',
-  'profile',
-  'careTypes',
-  'childType',
-  'childrens',
-  'wantedGues',
+export class CreateParentsDto extends PickType(User, [
+  'phoneNum',
+  'password',
+  'userType',
+  'introduction',
 ] as const) {
   @ApiProperty({
     type: '[string]',
@@ -22,7 +19,7 @@ export class CreateParentsDto extends OmitType(User, [
 
   @ApiProperty({
     type: '[string]',
-    example: ['199701', '200003'],
+    example: ['202301', '202111'],
   })
   @IsOptional()
   @IsArray()
