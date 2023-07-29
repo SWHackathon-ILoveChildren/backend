@@ -8,7 +8,7 @@ import { CreateCaresDto } from './dto/createCares.dto';
 export class CaresController {
   constructor(private careservice: CaresService) {}
 
-  @Post(':userId')
+  @Post(':parentsUserId')
   @ApiOperation({
     summary: '돌봄 신청 API',
   })

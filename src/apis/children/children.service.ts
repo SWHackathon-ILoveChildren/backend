@@ -14,6 +14,7 @@ export class ChildrenService {
   async findOneById({ childrenId }) {
     const children = await this.childrenRepository.findOne({
       where: { id: childrenId },
+      relations: ['user'],
     });
 
     if (!children)

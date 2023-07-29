@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { ChildrenService } from '../children/children.service';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,23 +17,37 @@ export class CaresService {
   ) {}
 
   async create({ parentsUserId, ...createCaresDto }) {
-    const { childrenId, ...rest } = createCaresDto;
+    const { childrenId, sitterUserId, ...rest } = createCaresDto;
 
     const parentsUser = await this.usersService.parentsUserFindOneById({
       parentsUserId,
     });
 
-    // const sitterUser = await this.usersService.
-    const children = await this.childrensService.findOneById({ childrenId });
+    const sitterUser = await this.usersService.sitterUserFindOneById({
+      sitterUserId,
+    });
 
-    if (parentsUser.userType === 'PARENTS') {
-      // await this.caresRepository.save({
-      //   ...rest,
-      //   careStatus: STATUS_TYPE_ENUM.SCHEDULE,
-      //   children,
-      //   parentsUser,
-      //   sitterUser:
-      // });
+    const children = await this.childrensService.findOneById({ childrenId });
+    if (children.user.id !== parentsUserId)
+      throw new UnprocessableEntityException(
+        '아이의 정보가 올바르지 않습니다.'
+      );
+
+    if (
+      parentsUser.userType === 'PARENTS' &&
+      sitterUser.userType === 'SITTER'
+    ) {
+      await this.caresRepository.save({
+        ...rest,
+        careStatus: STATUS_TYPE_ENUM.SCHEDULE,
+        children,
+        parentsUser,
+        sitterUser,
+      });
+    } else {
+      throw new UnprocessableEntityException(
+        '부모 회원 또는 시니어시터 회원의 정보가 올바르지 않습니다.'
+      );
     }
   }
 }
