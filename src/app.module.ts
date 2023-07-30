@@ -10,6 +10,7 @@ import { WantedGuModule } from './apis/wantedGu/watnedGu.module';
 import { CareTypeModule } from './apis/careType/careTypes.module';
 import { CaresModule } from './apis/cares/care.module';
 import { AuthModule } from './apis/auth/auth.module';
+import { ChildTypeModule } from './apis/childTypes/childType.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from './apis/auth/auth.module';
     CaresModule,
     CareTypeModule,
     ChildrenModule,
+    ChildTypeModule,
     GuModule,
     UsersModule,
     WantedGuModule,
