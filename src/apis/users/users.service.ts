@@ -116,7 +116,7 @@ export class UsersService {
       userType,
       careTypes,
       wantedGuName,
-      childType,
+      userChildTypeID,
       ...rest
     } = createSittersDto;
 
@@ -128,14 +128,12 @@ export class UsersService {
 
     // enum 타입 검증
     this.isValidUserType({ userType });
-    this.isValidChildType({ childType });
 
     const user = await this.usersRepository.save({
       ...rest,
       phoneNum,
       password: hashedPassword,
       userType,
-      childType,
     });
 
     // 시니어시터 회원이 원하는 돌봄 타입 저장 타입
@@ -152,6 +150,8 @@ export class UsersService {
       guId: wantedGu.id,
       userId: user.id,
     });
+
+    // await this.childTypeService.;
 
     return user;
   }
