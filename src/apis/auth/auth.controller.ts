@@ -2,8 +2,8 @@ import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { Request, Response } from 'express';
-import { IOAuthUser } from './interfaces/auth.interface';
+import { Response } from 'express';
+import { LoginReturn } from './interfaces/auth.interface';
 
 @Controller()
 export class AuthController {
@@ -15,17 +15,16 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: '로그인 성공',
-    // type: ,
+    type: LoginReturn,
   })
   @ApiResponse({
     status: 403,
     description: '로그인 실패',
   })
-  login(
+  async login(
     @Body() loginDto: LoginDto,
-    @Req() req: Request & IOAuthUser,
     @Res() res: Response
-  ) {
-    return this.authservice.loginOAuth({ loginDto, req, res });
+  ): Promise<object> {
+    return await this.authservice.loginOAuth({ loginDto, res });
   }
 }

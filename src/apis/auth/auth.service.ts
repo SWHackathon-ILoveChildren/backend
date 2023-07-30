@@ -3,6 +3,7 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import {
   IAuthServiceGetAccessToken,
+  IAuthServiceLogin,
   IAuthServiceSetRefreshToken,
 } from './interfaces/auth.interface';
 import { JwtService } from '@nestjs/jwt';
@@ -14,7 +15,7 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async loginOAuth({ loginDto, req, res }) {
+  async loginOAuth({ loginDto, res }: IAuthServiceLogin): Promise<object> {
     const { phoneNum, password } = loginDto;
 
     const user = await this.usersService.findOneByPhoneNum({ phoneNum });
@@ -30,9 +31,10 @@ export class AuthService {
         '비밀번호가 틀렸습니다. 다시 시도해주세요.'
       );
 
-    // 3. 회원가입 O -> 로그인
+    this.setRefreshToken({ user, res });
+    const accessToken = this.getAccessToken({ user });
 
-    // 4. 리다이렉트
+    return res.json({ accessToken });
   }
 
   setRefreshToken({ user, res }: IAuthServiceSetRefreshToken): void {
