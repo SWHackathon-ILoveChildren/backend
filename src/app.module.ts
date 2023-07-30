@@ -9,9 +9,11 @@ import { GuModule } from './apis/gu/gu.module';
 import { WantedGuModule } from './apis/wantedGu/watnedGu.module';
 import { CareTypeModule } from './apis/careType/careTypes.module';
 import { CaresModule } from './apis/cares/care.module';
+import { AuthModule } from './apis/auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     CaresModule,
     CareTypeModule,
     ChildrenModule,
