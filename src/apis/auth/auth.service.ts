@@ -1,10 +1,15 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
+import { IAuthServiceSetRefreshToken } from './interfaces/auth.interface';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService
+  ) {}
 
   async loginOAuth({ loginDto, req, res }) {
     const { phoneNum, password } = loginDto;
@@ -25,5 +30,18 @@ export class AuthService {
     // 3. 회원가입 O -> 로그인
 
     // 4. 리다이렉트
+  }
+
+  setRefreshToken({ user, res }: IAuthServiceSetRefreshToken): void {
+    const refreshToken = this.jwtService.sign(
+      { sub: user.id },
+      { secret: process.env.JWT_REFRESH_KEY, expiresIn: '2w' }
+    );
+    res.setHeader('Access-Control-Allow-Origin', process.env.ORIGIN);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader(
+      'Set-Cookie',
+      `refreshToken=${refreshToken};path=/; SameSite=None; Secure; httpOnly`
+    );
   }
 }
