@@ -1,7 +1,10 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
-import { IAuthServiceSetRefreshToken } from './interfaces/auth.interface';
+import {
+  IAuthServiceGetAccessToken,
+  IAuthServiceSetRefreshToken,
+} from './interfaces/auth.interface';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -42,6 +45,13 @@ export class AuthService {
     res.setHeader(
       'Set-Cookie',
       `refreshToken=${refreshToken};path=/; SameSite=None; Secure; httpOnly`
+    );
+  }
+
+  getAccessToken({ user }: IAuthServiceGetAccessToken): string {
+    return this.jwtService.sign(
+      { sub: user.id },
+      { secret: process.env.JWT_ACCESS_KEY, expiresIn: '2h' }
     );
   }
 }

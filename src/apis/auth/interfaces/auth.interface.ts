@@ -12,3 +12,12 @@ export interface IAuthServiceSetRefreshToken {
   user?: User;
   res: Response;
 }
+
+export interface IAuthUser {
+  user?: {
+    id: string;
+  };
+}
+export interface IAuthServiceGetAccessToken {
+  user: User | IAuthUser['user'];
+}
