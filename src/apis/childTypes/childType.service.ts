@@ -20,7 +20,8 @@ export class ChildTypeService {
       throw new UnprocessableEntityException('이미 등록된 아이 타입입니다.');
   }
 
-  async create({ createChildTypeDto }: CreateChildTypeDto) {
-    // await this.findOne/
+  async create(createChildTypeDto: CreateChildTypeDto) {
+    await this.findOne({ name: createChildTypeDto.name });
+    return await this.childTypeRepository.save({ ...createChildTypeDto });
   }
 }

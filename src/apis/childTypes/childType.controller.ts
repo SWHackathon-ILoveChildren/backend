@@ -22,6 +22,6 @@ export class ChildTypeController {
     description: '생성 실패',
   })
   createChildType(@Body() createChildTypeDto: CreateChildTypeDto) {
-    return this.childTypeService.create({ createChildTypeDto });
+    return this.childTypeService.create(createChildTypeDto);
   }
 }
