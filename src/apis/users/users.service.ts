@@ -69,6 +69,21 @@ export class UsersService {
     const wantedGu = await this.wantedGuService.findOneByWantedGuId({
       wantedGuId,
     });
+
+    if (!wantedGu)
+      throw new UnprocessableEntityException('원하는 구를 찾을 수 없습니다.');
+
+    const sitterUsers = await this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoin('user.wantedGues', 'wantedGu')
+      .where('user.userType = :userType', { userType: 'SITTER' })
+      .andWhere('wantedGu.gu = :gu', { gu: wantedGu.gu.id })
+      .getMany();
+
+    console.log(sitterUsers);
+
+    // 가입순으로 최근 3명 조회 필터 추가 필요
+    // 엔티티 createAt 컬럼 추가 필요
   }
 
   async createParent(createUserDto) {
