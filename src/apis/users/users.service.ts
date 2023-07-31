@@ -14,6 +14,7 @@ import { WantedGuService } from '../wantedGu/watnedGu.service';
 import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
+import { fetchBestSitterUserReturn } from './interfaces/users.interface';
 
 @Injectable()
 export class UsersService {
@@ -58,7 +59,11 @@ export class UsersService {
     });
   }
 
-  async bestSitterFindAllByParentsUserId({ parentsUserId }) {
+  async bestSitterFindAllByParentsUserId({
+    parentsUserId,
+  }: {
+    parentsUserId: string;
+  }): Promise<fetchBestSitterUserReturn[]> {
     const parentsUser = await this.parentsUserFindOneById({ parentsUserId });
 
     if (!parentsUser || parentsUser.userType !== 'PARENTS')
@@ -76,25 +81,39 @@ export class UsersService {
     const sitterUsers = await this.usersRepository
       .createQueryBuilder('user')
       .leftJoin('user.wantedGues', 'wantedGu')
+      .leftJoinAndSelect('user.careTypes', 'careType')
+      .leftJoinAndSelect('user.userChildTypes', 'userChildType')
+      .leftJoinAndSelect('userChildType.childTypes', 'childType')
       .where('user.userType = :userType', { userType: 'SITTER' })
       .andWhere('wantedGu.gu = :gu', { gu: wantedGu.gu.id })
       .orderBy('user.createdAt', 'ASC')
       .take(3)
       .getMany();
 
-    // careType DB에서 찾아오기
-
     const sitterUserIds = sitterUsers.map((sitterUser) => {
-      return sitterUser.id;
+      const sitterUserInfo = {
+        sitterUserId: sitterUser.id,
+        sitterUserName: sitterUser.name,
+        sitterUserCreatedAt: sitterUser.createdAt,
+        sitterUserCareType: sitterUser.careTypes,
+        sitterUserChildType: sitterUser.userChildTypes,
+      };
+      return sitterUserInfo;
     });
 
-    const sitterUserInfo = sitterUserIds.map(async (sitterUserId) => {
-      // const careTypes = await this.careTypesService.findOneBySitterUserId({
-      //   sitterUserId,
-      // });
-    });
+    const result = sitterUserIds.map((el) => ({
+      sitterUserId: el.sitterUserId,
+      sitterUserName: el.sitterUserName,
+      sitterUserCreatedAt: el.sitterUserCreatedAt,
+      sitterUserCareTypeNames: el.sitterUserCareType.map(
+        (careType) => careType.name
+      ),
+      sitterUserChildTypeNames: el.sitterUserChildType.map(
+        (childType) => childType.childTypes.name
+      ),
+    }));
 
-    // userChildType DB에서 찾아오기
+    return result;
   }
 
   async createParent(createUserDto) {

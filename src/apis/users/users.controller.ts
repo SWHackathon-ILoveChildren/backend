@@ -5,6 +5,7 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
   CreateParentsUsers,
   CreateSitterUsers,
+  fetchBestSitterUserReturn,
 } from './interfaces/users.interface';
 import { CreateSittersDto } from './dto/createSitters.dto';
 import { User } from './entities/user.entity';
@@ -37,13 +38,15 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    // type: ,
+    type: [fetchBestSitterUserReturn],
   })
   @ApiResponse({
     status: 422,
     description: '조회 실패',
   })
-  fetchBestSitterUser(@Param('parentsUserId') parentsUserId: string) {
+  fetchBestSitterUser(
+    @Param('parentsUserId') parentsUserId: string
+  ): Promise<fetchBestSitterUserReturn[]> {
     return this.usersService.bestSitterFindAllByParentsUserId({
       parentsUserId,
     });

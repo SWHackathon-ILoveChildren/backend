@@ -19,3 +19,33 @@ export class CreateSitterUsers extends OmitType(CreateParentsUsers, [
   })
   introduction: string;
 }
+
+export class fetchBestSitterUserReturn {
+  @ApiProperty({
+    example: 'c4b5617e-f8ce-4650-b50a-bb7e09b75ef2',
+  })
+  sitterUserId: string;
+
+  @ApiProperty({
+    example: '홍길동',
+  })
+  sitterUserName: string;
+
+  @ApiProperty({
+    example: '2023-07-31T08:46:05.979Z',
+    description: '가입순이 맞는 확인용',
+  })
+  sitterUserCreatedAt: Date;
+
+  @ApiProperty({
+    type: [String],
+    example: ['등하원 돌봄', '아픈아이 돌봄'],
+  })
+  sitterUserCareTypeNames: string[];
+
+  @ApiProperty({
+    type: [String],
+    example: ['신생아', '영아'],
+  })
+  sitterUserChildTypeNames: string[];
+}
