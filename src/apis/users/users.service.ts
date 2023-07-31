@@ -31,7 +31,7 @@ export class UsersService {
   async parentsUserFindOneById({ parentsUserId }) {
     const parentsUser = await this.usersRepository.findOne({
       where: { id: parentsUserId },
-      relations: ['wantedGues'],
+      relations: ['wantedGues', 'careTypes', 'userChildTypes'],
     });
 
     if (!parentsUser)
@@ -43,7 +43,7 @@ export class UsersService {
   async sitterUserFindOneById({ sitterUserId }) {
     const sitterUser = await this.usersRepository.findOne({
       where: { id: sitterUserId },
-      relations: ['cares'],
+      relations: ['cares', 'careTypes', 'userChildTypes'],
     });
 
     if (!sitterUser)
@@ -76,14 +76,24 @@ export class UsersService {
     const sitterUsers = await this.usersRepository
       .createQueryBuilder('user')
       .leftJoin('user.wantedGues', 'wantedGu')
+      // .leftJoinAndSelect('user.careTypes', 'careType')
+      // .leftJoinAndSelect('user.userChildTypes', 'userChildType')
+      // .leftJoinAndSelect('userChildType.childTypes', 'childType')
       .where('user.userType = :userType', { userType: 'SITTER' })
       .andWhere('wantedGu.gu = :gu', { gu: wantedGu.gu.id })
+      .orderBy('user.createdAt', 'ASC')
+      .take(3)
       .getMany();
 
-    console.log(sitterUsers);
+    await Promise.all(
+      sitterUsers.map(async (sitterUser) => {
+        // careType DB에서 찾아오기
+        // sitterUser.careTypes = await this.careType;
+        // userChildType DB에서 찾아오기
+      })
+    );
 
-    // 가입순으로 최근 3명 조회 필터 추가 필요
-    // 엔티티 createAt 컬럼 추가 필요
+    console.log(sitterUsers);
   }
 
   async createParent(createUserDto) {
