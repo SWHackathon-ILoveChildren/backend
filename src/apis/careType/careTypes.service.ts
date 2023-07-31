@@ -4,14 +4,14 @@ import { CareType } from './entities/careType.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class CaresService {
+export class CareTypesService {
   constructor(
     @InjectRepository(CareType)
-    private caresRepository: Repository<CareType>
+    private careTypesRepository: Repository<CareType>
   ) {}
 
   async addCareType({ careTypes, userId }) {
-    return await this.caresRepository.save(
+    return await this.careTypesRepository.save(
       careTypes.map((careType) => ({
         name: careType,
         user: { id: userId },

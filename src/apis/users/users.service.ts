@@ -11,7 +11,7 @@ import { USER_TYPE_ENUM } from './types/user.type';
 import { ChildrenService } from '../children/children.service';
 import { GuService } from '../gu/gu.service';
 import { WantedGuService } from '../wantedGu/watnedGu.service';
-import { CaresService } from '../careType/careTypes.service';
+import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
 
@@ -24,7 +24,7 @@ export class UsersService {
     private childrenService: ChildrenService,
     private guService: GuService,
     private wantedGuService: WantedGuService,
-    private caresService: CaresService,
+    private careTypesService: CareTypesService,
     private userChildTypesService: UserChildTypesService
   ) {}
 
@@ -126,7 +126,7 @@ export class UsersService {
 
     // 부모 회원이 원하는 돌봄 타입 저장 로직
     if (careTypes.length > 0) {
-      parentsCareType = await this.caresService.addCareType({
+      parentsCareType = await this.careTypesService.addCareType({
         careTypes,
         userId: user.id,
       });
@@ -179,7 +179,7 @@ export class UsersService {
 
     // 시니어시터 회원이 원하는 돌봄 타입 저장 타입
     if (careTypes.length > 0) {
-      await this.caresService.addCareType({
+      await this.careTypesService.addCareType({
         careTypes,
         userId: user.id,
       });
