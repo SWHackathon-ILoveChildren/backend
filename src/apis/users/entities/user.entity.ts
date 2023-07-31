@@ -111,5 +111,5 @@ export class User {
       'userChildTypes: [{ id: 0ab0d27a-2d34-4bda-a936-29454f014612, user:{ id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }}, { id: 889675ad-e3fe-4fe1-ad0d-6b06f5447f41, user: { id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }}]',
   })
   @OneToMany(() => UserChildType, (userChildTypes) => userChildTypes.users)
-  userChildTypes: UserChildType;
+  userChildTypes: UserChildType[];
 }

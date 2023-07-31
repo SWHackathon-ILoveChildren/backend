@@ -8,5 +8,6 @@ import { ChildType } from './entities/childType.entity';
   imports: [TypeOrmModule.forFeature([ChildType])],
   providers: [ChildTypeService],
   controllers: [ChildTypeController],
+  exports: [ChildTypeService],
 })
 export class ChildTypeModule {}

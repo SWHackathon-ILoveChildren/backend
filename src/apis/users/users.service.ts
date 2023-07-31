@@ -13,6 +13,7 @@ import { GuService } from '../gu/gu.service';
 import { WantedGuService } from '../wantedGu/watnedGu.service';
 import { CaresService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
+import { UserChildTypesService } from '../userChildType/userChileTypes.service';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +24,8 @@ export class UsersService {
     private childrenService: ChildrenService,
     private guService: GuService,
     private wantedGuService: WantedGuService,
-    private caresService: CaresService
+    private caresService: CaresService,
+    private userChildTypesService: UserChildTypesService
   ) {}
 
   async parentsUserFindOneById({ parentsUserId }) {
@@ -116,7 +118,7 @@ export class UsersService {
       userType,
       careTypes,
       wantedGuName,
-      userChildTypeID,
+      childTypeIds,
       ...rest
     } = createSittersDto;
 
@@ -145,13 +147,16 @@ export class UsersService {
     }
 
     // 시니어시터 회원이 돌봄 하길 원하는 지역
-    const wantedGu = await this.guService.findByWantedGuName(wantedGuName);
+    const wantedGu = await this.guService.findByWantedGuName({ wantedGuName });
     await this.wantedGuService.addWantedGu({
       guId: wantedGu.id,
       userId: user.id,
     });
 
-    // await this.childTypeService.;
+    await this.userChildTypesService.addUserChildType({
+      childTypeIds,
+      userId: user.id,
+    });
 
     return user;
   }

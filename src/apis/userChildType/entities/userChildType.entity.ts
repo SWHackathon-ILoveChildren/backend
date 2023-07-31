@@ -24,7 +24,7 @@ export class UserChildType {
   @ApiProperty({
     type: () => [ChildType],
     example:
-      'childTypes: [{ id: 0ab0d27a-2d34-4bda-a936-29454f014612, childTypes:{ id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }}, { id: 889675ad-e3fe-4fe1-ad0d-6b06f5447f41, childTypes: { id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }}]',
+      'childTypes: [{ id: 0ab0d27a-2d34-4bda-a936-29454f014612, childTypes:{ id: 1 }}, { id: 889675ad-e3fe-4fe1-ad0d-6b06f5447f41, childTypes: { id: 3 }}]',
   })
   @ManyToOne(() => ChildType, (childTypes) => childTypes.userChildTypes)
   childTypes: ChildType;

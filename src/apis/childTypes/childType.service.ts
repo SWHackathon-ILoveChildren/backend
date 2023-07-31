@@ -11,6 +11,14 @@ export class ChildTypeService {
     private childTypeRepository: Repository<ChildType>
   ) {}
 
+  async findOneById({ childTypeId }: { childTypeId: number }) {
+    return await this.childTypeRepository.findOne({
+      where: {
+        id: childTypeId,
+      },
+    });
+  }
+
   async findOne({ name }) {
     const childTypeName = await this.childTypeRepository.findOne({
       where: { name },

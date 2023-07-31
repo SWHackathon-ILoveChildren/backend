@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ChildTypeService } from './childType.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { ChildType } from './entities/childType.entity';
 import { CreateChildTypeDto } from './dto/createChildType.dto';
+import { CreateChildTypeReturn } from './interfaces/childTypes.interface';
 
 @Controller('childType')
 export class ChildTypeController {
@@ -15,13 +15,15 @@ export class ChildTypeController {
   @ApiResponse({
     status: 201,
     description: '생성 성공',
-    type: ChildType,
+    type: CreateChildTypeReturn,
   })
   @ApiResponse({
     status: 409,
     description: '생성 실패',
   })
-  createChildType(@Body() createChildTypeDto: CreateChildTypeDto) {
+  createChildType(
+    @Body() createChildTypeDto: CreateChildTypeDto
+  ): Promise<CreateChildTypeReturn> {
     return this.childTypeService.create(createChildTypeDto);
   }
 }

@@ -7,13 +7,18 @@ export class CreateSittersDto extends PickType(CreateParentsDto, [
   'phoneNum',
   'password',
   'careTypes',
-  'wantedGuName',
 ] as const) {
   @ApiProperty({
     example: '안녕하세요. 시니어 시터 홍길동입니다.',
   })
   @IsString()
   introduction: string;
+
+  @ApiProperty({
+    example: '강동구',
+  })
+  @IsString()
+  wantedGuName: string;
 
   @ApiProperty({
     example: USER_TYPE_ENUM.SITTER,
@@ -26,8 +31,9 @@ export class CreateSittersDto extends PickType(CreateParentsDto, [
   userType: USER_TYPE_ENUM;
 
   @ApiProperty({
-    example: '0dc011aa-d76e-11ed-afa1-0242ac120002',
+    description: '1: 신생아 / 2: 영아 / 3: 유아 / 4: 초등학생',
+    example: ['1', '2'],
   })
   @IsUUID()
-  userChildTypeID: string;
+  childTypeIds: [string];
 }

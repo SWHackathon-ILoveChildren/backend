@@ -7,6 +7,7 @@ import { ChildrenModule } from '../children/children.module';
 import { GuModule } from '../gu/gu.module';
 import { WantedGuModule } from '../wantedGu/watnedGu.module';
 import { CareTypeModule } from '../careType/careTypes.module';
+import { UserChildTypesModule } from '../userChildType/userChileTypes.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CareTypeModule } from '../careType/careTypes.module';
     GuModule,
     WantedGuModule,
     CareTypeModule,
+    UserChildTypesModule,
   ],
   providers: [UsersService],
   controllers: [UsersController],
