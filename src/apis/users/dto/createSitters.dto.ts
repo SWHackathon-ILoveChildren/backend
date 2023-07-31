@@ -9,6 +9,12 @@ export class CreateSittersDto extends PickType(CreateParentsDto, [
   'careTypes',
 ] as const) {
   @ApiProperty({
+    example: '홍길동',
+  })
+  @IsString()
+  name: string;
+
+  @ApiProperty({
     example: '안녕하세요. 시니어 시터 홍길동입니다.',
   })
   @IsString()
