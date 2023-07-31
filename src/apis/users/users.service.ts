@@ -76,24 +76,25 @@ export class UsersService {
     const sitterUsers = await this.usersRepository
       .createQueryBuilder('user')
       .leftJoin('user.wantedGues', 'wantedGu')
-      // .leftJoinAndSelect('user.careTypes', 'careType')
-      // .leftJoinAndSelect('user.userChildTypes', 'userChildType')
-      // .leftJoinAndSelect('userChildType.childTypes', 'childType')
       .where('user.userType = :userType', { userType: 'SITTER' })
       .andWhere('wantedGu.gu = :gu', { gu: wantedGu.gu.id })
       .orderBy('user.createdAt', 'ASC')
       .take(3)
       .getMany();
 
-    await Promise.all(
-      sitterUsers.map(async (sitterUser) => {
-        // careType DB에서 찾아오기
-        // sitterUser.careTypes = await this.careType;
-        // userChildType DB에서 찾아오기
-      })
-    );
+    // careType DB에서 찾아오기
 
-    console.log(sitterUsers);
+    const sitterUserIds = sitterUsers.map((sitterUser) => {
+      return sitterUser.id;
+    });
+
+    const sitterUserInfo = sitterUserIds.map(async (sitterUserId) => {
+      // const careTypes = await this.careTypesService.findOneBySitterUserId({
+      //   sitterUserId,
+      // });
+    });
+
+    // userChildType DB에서 찾아오기
   }
 
   async createParent(createUserDto) {
