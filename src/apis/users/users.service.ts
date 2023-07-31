@@ -60,6 +60,15 @@ export class UsersService {
 
   async bestSitterFindAllByParentsUserId({ parentsUserId }) {
     const parentsUser = await this.parentsUserFindOneById({ parentsUserId });
+
+    if (!parentsUser || parentsUser.userType !== 'PARENTS')
+      throw new UnprocessableEntityException('부모 유저를 찾을 수 없습니다.');
+
+    const wantedGuId = parentsUser.wantedGues[0].id;
+
+    // const wantedGu = await this.wantedGuService.findOneByWantedGuId({
+    //   wantedGuId,
+    // });
   }
 
   async createParent(createUserDto) {
