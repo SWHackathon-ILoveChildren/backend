@@ -11,9 +11,10 @@ import { USER_TYPE_ENUM } from './types/user.type';
 import { ChildrenService } from '../children/children.service';
 import { GuService } from '../gu/gu.service';
 import { WantedGuService } from '../wantedGu/watnedGu.service';
-import { CaresService } from '../careType/careTypes.service';
+import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
+import { fetchBestSitterUserReturn } from './interfaces/users.interface';
 
 @Injectable()
 export class UsersService {
@@ -24,13 +25,14 @@ export class UsersService {
     private childrenService: ChildrenService,
     private guService: GuService,
     private wantedGuService: WantedGuService,
-    private caresService: CaresService,
+    private careTypesService: CareTypesService,
     private userChildTypesService: UserChildTypesService
   ) {}
 
   async parentsUserFindOneById({ parentsUserId }) {
     const parentsUser = await this.usersRepository.findOne({
       where: { id: parentsUserId },
+      relations: ['wantedGues', 'careTypes', 'userChildTypes'],
     });
 
     if (!parentsUser)
@@ -42,7 +44,7 @@ export class UsersService {
   async sitterUserFindOneById({ sitterUserId }) {
     const sitterUser = await this.usersRepository.findOne({
       where: { id: sitterUserId },
-      relations: ['cares'],
+      relations: ['cares', 'careTypes', 'userChildTypes'],
     });
 
     if (!sitterUser)
@@ -55,6 +57,63 @@ export class UsersService {
     return await this.usersRepository.findOne({
       where: { phoneNum },
     });
+  }
+
+  async bestSitterFindAllByParentsUserId({
+    parentsUserId,
+  }: {
+    parentsUserId: string;
+  }): Promise<fetchBestSitterUserReturn[]> {
+    const parentsUser = await this.parentsUserFindOneById({ parentsUserId });
+
+    if (!parentsUser || parentsUser.userType !== 'PARENTS')
+      throw new UnprocessableEntityException('부모 유저를 찾을 수 없습니다.');
+
+    const wantedGuId = parentsUser.wantedGues[0].id;
+
+    const wantedGu = await this.wantedGuService.findOneByWantedGuId({
+      wantedGuId,
+    });
+
+    if (!wantedGu)
+      throw new UnprocessableEntityException('원하는 구를 찾을 수 없습니다.');
+
+    const sitterUsers = await this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoin('user.wantedGues', 'wantedGu')
+      .leftJoinAndSelect('user.careTypes', 'careType')
+      .leftJoinAndSelect('user.userChildTypes', 'userChildType')
+      .leftJoinAndSelect('userChildType.childTypes', 'childType')
+      .where('user.userType = :userType', { userType: 'SITTER' })
+      .andWhere('wantedGu.gu = :gu', { gu: wantedGu.gu.id })
+      .orderBy('user.createdAt', 'ASC')
+      .take(3)
+      .getMany();
+
+    const sitterUserIds = sitterUsers.map((sitterUser) => {
+      const sitterUserInfo = {
+        sitterUserId: sitterUser.id,
+        sitterUserName: sitterUser.name,
+        sitterUserCreatedAt: sitterUser.createdAt,
+        sitterUserCareType: sitterUser.careTypes,
+        sitterUserChildType: sitterUser.userChildTypes,
+      };
+      return sitterUserInfo;
+    });
+
+    const result = sitterUserIds.map((el) => ({
+      sitterUserId: el.sitterUserId,
+      sitterUserName: el.sitterUserName,
+      sitterUserCreatedAt: el.sitterUserCreatedAt,
+      sitterUserCareTypeNames: el.sitterUserCareType.map(
+        (careType) => careType.name
+      ),
+      sitterUserChildTypeNames: el.sitterUserChildType.map(
+        (childType) => childType.childTypes.name
+      ),
+    }));
+
+    return result;
   }
 
   async createParent(createUserDto) {
@@ -87,7 +146,7 @@ export class UsersService {
 
     // 부모 회원이 원하는 돌봄 타입 저장 로직
     if (careTypes.length > 0) {
-      parentsCareType = await this.caresService.addCareType({
+      parentsCareType = await this.careTypesService.addCareType({
         careTypes,
         userId: user.id,
       });
@@ -140,7 +199,7 @@ export class UsersService {
 
     // 시니어시터 회원이 원하는 돌봄 타입 저장 타입
     if (careTypes.length > 0) {
-      await this.caresService.addCareType({
+      await this.careTypesService.addCareType({
         careTypes,
         userId: user.id,
       });

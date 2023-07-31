@@ -6,7 +6,7 @@ import { User } from './entities/user.entity';
 import { ChildrenModule } from '../children/children.module';
 import { GuModule } from '../gu/gu.module';
 import { WantedGuModule } from '../wantedGu/watnedGu.module';
-import { CareTypeModule } from '../careType/careTypes.module';
+import { CareTypesModule } from '../careType/careTypes.module';
 import { UserChildTypesModule } from '../userChildType/userChileTypes.module';
 
 @Module({
@@ -15,7 +15,7 @@ import { UserChildTypesModule } from '../userChildType/userChileTypes.module';
     ChildrenModule,
     GuModule,
     WantedGuModule,
-    CareTypeModule,
+    CareTypesModule,
     UserChildTypesModule,
   ],
   providers: [UsersService],

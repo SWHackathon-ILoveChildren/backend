@@ -13,6 +13,17 @@ export class UserChildTypesService {
     private childTypeService: ChildTypeService
   ) {}
 
+  async findOneBySitterUserId({ sitterUserId }) {
+    return await this.userChildTypesRepository.findOne({
+      where: {
+        users: {
+          id: sitterUserId,
+        },
+      },
+      relations: ['users', 'childTypes'],
+    });
+  }
+
   async addUserChildType({ childTypeIds, userId }) {
     const childTypeEntities = await Promise.all(
       childTypeIds.map(async (childTypeId) => {

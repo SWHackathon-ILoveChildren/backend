@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
   OneToOne,
@@ -67,6 +68,12 @@ export class User {
   @IsEnum(USER_TYPE_ENUM)
   @Column({ type: 'enum', enum: USER_TYPE_ENUM })
   userType: USER_TYPE_ENUM;
+
+  @ApiProperty({
+    example: '2023-07-31T06:48:36.266Z',
+  })
+  @CreateDateColumn()
+  createdAt: Date;
 
   @ApiProperty({
     example: 'profile: { id: 0dc011aa-d76e-11ed-afa1-0242ac120002 }',
