@@ -66,9 +66,9 @@ export class UsersService {
 
     const wantedGuId = parentsUser.wantedGues[0].id;
 
-    // const wantedGu = await this.wantedGuService.findOneByWantedGuId({
-    //   wantedGuId,
-    // });
+    const wantedGu = await this.wantedGuService.findOneByWantedGuId({
+      wantedGuId,
+    });
   }
 
   async createParent(createUserDto) {

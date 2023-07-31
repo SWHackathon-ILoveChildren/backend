@@ -10,6 +10,15 @@ export class WantedGuService {
     private wantedGuRepository: Repository<WantedGu>
   ) {}
 
+  findOneByWantedGuId({ wantedGuId }) {
+    return this.wantedGuRepository.findOne({
+      where: {
+        id: wantedGuId,
+      },
+      relations: ['gu'],
+    });
+  }
+
   async addWantedGu({ guId, userId }) {
     return this.wantedGuRepository.save({
       gu: { id: guId },
