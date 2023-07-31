@@ -10,6 +10,17 @@ export class CareTypesService {
     private careTypesRepository: Repository<CareType>
   ) {}
 
+  async findOneBySitterUserId({ sitterUserId }) {
+    return await this.careTypesRepository.find({
+      where: {
+        user: {
+          id: sitterUserId,
+        },
+      },
+      relations: ['user'],
+    });
+  }
+
   async addCareType({ careTypes, userId }) {
     return await this.careTypesRepository.save(
       careTypes.map((careType) => ({
