@@ -30,6 +30,25 @@ export class UsersController {
     return this.usersService.findOneByPhoneNum({ phoneNum });
   }
 
+  @Get('/sitters/:parentsUserId')
+  @ApiOperation({
+    summary: '지역 추천 시니어 시터 조회 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    // type: ,
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  fetchBestSitterUser(@Param('parentsUserId') parentsUserId: string) {
+    return this.usersService.bestSitterFindAllByParentsUserId({
+      parentsUserId,
+    });
+  }
+
   @Post('parents')
   @ApiOperation({
     summary: '부모 유저 생성 API',
