@@ -31,6 +31,7 @@ export class UsersService {
   async parentsUserFindOneById({ parentsUserId }) {
     const parentsUser = await this.usersRepository.findOne({
       where: { id: parentsUserId },
+      relations: ['wantedGues'],
     });
 
     if (!parentsUser)
@@ -55,6 +56,10 @@ export class UsersService {
     return await this.usersRepository.findOne({
       where: { phoneNum },
     });
+  }
+
+  async bestSitterFindAllByParentsUserId({ parentsUserId }) {
+    const parentsUser = await this.parentsUserFindOneById({ parentsUserId });
   }
 
   async createParent(createUserDto) {
