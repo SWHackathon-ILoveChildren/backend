@@ -1,20 +1,24 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { CreateParentsDto } from './createParents.dto';
-import { CHILD_TYPE_ENUM } from '../types/child.type';
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { USER_TYPE_ENUM } from '../types/user.type';
 
 export class CreateSittersDto extends PickType(CreateParentsDto, [
   'phoneNum',
   'password',
   'careTypes',
-  'wantedGuName',
 ] as const) {
   @ApiProperty({
     example: '안녕하세요. 시니어 시터 홍길동입니다.',
   })
   @IsString()
   introduction: string;
+
+  @ApiProperty({
+    example: '강동구',
+  })
+  @IsString()
+  wantedGuName: string;
 
   @ApiProperty({
     example: USER_TYPE_ENUM.SITTER,
@@ -27,11 +31,9 @@ export class CreateSittersDto extends PickType(CreateParentsDto, [
   userType: USER_TYPE_ENUM;
 
   @ApiProperty({
-    example: CHILD_TYPE_ENUM.INFANT,
-    description:
-      '아이 유형 (INFANONETIMET: 신생아, INFANT: 영아, KID: 유아, ELEMENTARY: 초등학생)',
-    required: true,
-    enum: CHILD_TYPE_ENUM,
+    description: '1: 신생아 / 2: 영아 / 3: 유아 / 4: 초등학생',
+    example: ['1', '2'],
   })
-  childType: CHILD_TYPE_ENUM;
+  @IsUUID()
+  childTypeIds: [string];
 }

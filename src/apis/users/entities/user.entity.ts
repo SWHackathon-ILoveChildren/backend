@@ -6,7 +6,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { USER_TYPE_ENUM } from '../types/user.type';
-import { CHILD_TYPE_ENUM } from '../types/child.type';
 import { Profile } from 'src/apis/profiles/entities/profile.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID, IsNotEmpty, IsString, IsEnum } from 'class-validator';
@@ -14,6 +13,7 @@ import { Children } from 'src/apis/children/entities/children.entity';
 import { CareType } from 'src/apis/careType/entities/careType.entity';
 import { WantedGu } from 'src/apis/wantedGu/entities/wantedGu.entity';
 import { Care } from 'src/apis/cares/entities/care.entity';
+import { UserChildType } from 'src/apis/userChildType/entities/userChildType.entity';
 
 @Entity()
 export class User {
@@ -69,16 +69,6 @@ export class User {
   userType: USER_TYPE_ENUM;
 
   @ApiProperty({
-    example: CHILD_TYPE_ENUM.INFANT,
-    description:
-      '아이 유형 (INFANONETIMET: 신생아, INFANT: 영아, KID: 유아, ELEMENTARY: 초등학생)',
-    required: false,
-    enum: CHILD_TYPE_ENUM,
-  })
-  @Column({ type: 'enum', enum: CHILD_TYPE_ENUM, nullable: true })
-  childType: CHILD_TYPE_ENUM;
-
-  @ApiProperty({
     example: 'profile: { id: 0dc011aa-d76e-11ed-afa1-0242ac120002 }',
     description: '부모회원으로 가입하기에서는 profile을 사용하지 않습니다.',
   })
@@ -114,4 +104,12 @@ export class User {
   })
   @OneToMany(() => Care, (cares) => cares.sitterUser)
   cares: Care[];
+
+  @ApiProperty({
+    type: () => [UserChildType],
+    example:
+      'userChildTypes: [{ id: 0ab0d27a-2d34-4bda-a936-29454f014612, user:{ id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }}, { id: 889675ad-e3fe-4fe1-ad0d-6b06f5447f41, user: { id: 665a22a7-d465-4cf4-a27c-f8366c2ff83f }}]',
+  })
+  @OneToMany(() => UserChildType, (userChildTypes) => userChildTypes.users)
+  userChildTypes: UserChildType[];
 }

@@ -8,7 +8,6 @@ export class CreateParentsUsers extends PickType(User, [
   'password',
   'introduction',
   'userType',
-  'childType',
 ] as const) {}
 
 export class CreateSitterUsers extends OmitType(CreateParentsUsers, [

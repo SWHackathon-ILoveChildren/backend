@@ -29,8 +29,6 @@ export class CreateParentsDto extends PickType(User, [
   @ApiProperty({
     example: '강남구',
   })
-  @IsOptional()
   @IsString()
-  @IsString({ each: true })
   wantedGuName: string;
 }
