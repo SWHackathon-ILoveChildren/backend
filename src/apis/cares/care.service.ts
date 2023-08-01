@@ -26,7 +26,10 @@ export class CaresService {
 
     // 시터와 소통활 휴대폰 번호가 유저 휴대폰번호랑 다를 경우, 시터와 소통할 휴대폰 번호로 업데이트
     if (parentsUser.phoneNum !== contactPhoneNumber) {
-      // await this.usersService.
+      await this.usersService.updatePhoneNum({
+        userId: parentsUser.id,
+        phoneNum: contactPhoneNumber,
+      });
     }
 
     const sitterUser = await this.usersService.sitterUserFindOneById({

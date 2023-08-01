@@ -220,6 +220,19 @@ export class UsersService {
     return user;
   }
 
+  async updatePhoneNum({ userId, phoneNum }) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (user) {
+      user.phoneNum = phoneNum;
+      await this.usersRepository.save(user);
+    }
+  }
+
   // 유저 타입 검증
   isValidUserType({ userType }) {
     const typeCheck = Object.values(USER_TYPE_ENUM).includes(userType);
