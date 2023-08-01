@@ -1,8 +1,8 @@
 import { Body, Controller, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Care } from './entities/care.entity';
 import { CaresService } from './care.service';
 import { CreateCaresDto } from './dto/createCares.dto';
+import { CreateCareReturn } from './interfaces/cares.interface';
 
 @Controller('cares')
 export class CaresController {
@@ -15,7 +15,7 @@ export class CaresController {
   @ApiResponse({
     status: 201,
     description: '신청 성공',
-    type: Care,
+    type: CreateCareReturn,
   })
   @ApiResponse({
     status: 422,
@@ -24,7 +24,7 @@ export class CaresController {
   createCare(
     @Param('parentsUserId', ParseUUIDPipe) parentsUserId: string, //
     @Body() createCaresDto: CreateCaresDto
-  ) {
+  ): Promise<CreateCareReturn> {
     return this.careservice.create({ parentsUserId, ...createCaresDto });
   }
 }

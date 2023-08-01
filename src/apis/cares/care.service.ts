@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Care } from './entities/care.entity';
 import { Repository } from 'typeorm';
 import { STATUS_TYPE_ENUM } from './types/status.type';
+import { CreateCareReturn } from './interfaces/cares.interface';
 
 @Injectable()
 export class CaresService {
@@ -16,7 +17,10 @@ export class CaresService {
     private childrensService: ChildrenService
   ) {}
 
-  async create({ parentsUserId, ...createCaresDto }) {
+  async create({
+    parentsUserId,
+    ...createCaresDto
+  }): Promise<CreateCareReturn> {
     const { date, childrenId, sitterUserId, contactPhoneNumber, ...rest } =
       createCaresDto;
 
@@ -48,28 +52,33 @@ export class CaresService {
         '아이의 정보가 올바르지 않습니다.'
       );
 
-    console.log('💛', parentsUser);
+    let saveResult;
+    if (
+      parentsUser.userType === 'PARENTS' &&
+      sitterUser.userType === 'SITTER'
+    ) {
+      saveResult = await this.caresRepository.save({
+        ...rest,
+        date,
+        careStatus: STATUS_TYPE_ENUM.SCHEDULE,
+        children,
+        parentsUser,
+        sitterUser,
+      });
+    } else {
+      throw new UnprocessableEntityException(
+        '부모 회원 또는 시니어시터 회원의 정보가 올바르지 않습니다.'
+      );
+    }
 
-    // let saveResult;
-    // if (
-    //   parentsUser.userType === 'PARENTS' &&
-    //   sitterUser.userType === 'SITTER'
-    // ) {
-    //   saveResult = await this.caresRepository.save({
-    //     ...rest,
-    //     date,
-    //     careStatus: STATUS_TYPE_ENUM.SCHEDULE,
-    //     children,
-    //     parentsUser,
-    //     sitterUser,
-    //   });
-    // } else {
-    //   throw new UnprocessableEntityException(
-    //     '부모 회원 또는 시니어시터 회원의 정보가 올바르지 않습니다.'
-    //   );
-    // }
+    const result = {
+      id: saveResult.id,
+      date: saveResult.date,
+      startTime: saveResult.startTime,
+      endTime: saveResult.endTime,
+      status: saveResult.careStatus,
+    };
 
-    // console.log(saveResult);
-    // return saveResult;
+    return result;
   }
 }

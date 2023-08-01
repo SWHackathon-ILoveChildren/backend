@@ -26,7 +26,7 @@ export class CreateCaresDto extends PickType(Care, [
   @ApiProperty({
     description:
       '회원가입 시 진행한 휴대폰 번호와 시터와 소통할 휴대폰 번호가 다를 경우 기입',
-    example: '010-1234-5678',
+    example: '01012345678',
     required: false,
   })
   @IsString()
