@@ -23,6 +23,8 @@ export class ChildrenService {
     return children;
   }
 
+  async findAllByParentsUserId({ parentsUserId }) {}
+
   async addChildren({
     childrenBirths,
     userId,
