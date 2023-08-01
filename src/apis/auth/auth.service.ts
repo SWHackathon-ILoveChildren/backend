@@ -46,7 +46,7 @@ export class AuthService {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader(
       'Set-Cookie',
-      `refreshToken=${refreshToken};path=/; SameSite=None; Secure; httpOnly`
+      `refreshToken=${refreshToken}; path=/; domain=.34.64.176.81:3001; SameSite=None; Secure; httpOnly`
     );
   }
 
