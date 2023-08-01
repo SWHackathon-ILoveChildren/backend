@@ -76,6 +76,12 @@ export class User {
   createdAt: Date;
 
   @ApiProperty({
+    example: '01012345678',
+  })
+  @Column({ default: null })
+  contactPhoneNumber: string;
+
+  @ApiProperty({
     example: 'profile: { id: 0dc011aa-d76e-11ed-afa1-0242ac120002 }',
     description: '부모회원으로 가입하기에서는 profile을 사용하지 않습니다.',
   })

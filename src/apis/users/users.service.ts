@@ -227,8 +227,8 @@ export class UsersService {
       },
     });
 
-    if (user) {
-      user.phoneNum = phoneNum;
+    if (user.contactPhoneNumber === null) {
+      user.contactPhoneNumber = phoneNum;
       await this.usersRepository.save(user);
     }
   }
