@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ChildTypeService } from './childType.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateChildTypeDto } from './dto/createChildType.dto';
