@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateParentsDto } from './dto/createParents.dto';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
   CreateParentsUsers,
   CreateSitterUsers,
+  FetchUserPhoneNumReturn,
   fetchBestSitterUserReturn,
 } from './interfaces/users.interface';
 import { CreateSittersDto } from './dto/createSitters.dto';
@@ -29,6 +30,25 @@ export class UsersController {
   })
   fetchUser(@Param('phoneNum') phoneNum: string) {
     return this.usersService.findOneByPhoneNum({ phoneNum });
+  }
+
+  @Get(':userId')
+  @ApiOperation({
+    summary: '유저 Id 기반 휴대폰 번호 조회 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    type: FetchUserPhoneNumReturn,
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  fetchUserPhoneNum(
+    @Param('userId') userId: string
+  ): Promise<FetchUserPhoneNumReturn> {
+    return this.usersService.findOneByUserId({ userId });
   }
 
   @Get('/sitters/:parentsUserId')

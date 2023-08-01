@@ -49,3 +49,8 @@ export class fetchBestSitterUserReturn {
   })
   sitterUserChildTypeNames: string[];
 }
+
+export class FetchUserPhoneNumReturn extends PickType(User, [
+  'id',
+  'phoneNum',
+] as const) {}

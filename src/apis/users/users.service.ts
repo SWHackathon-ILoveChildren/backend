@@ -14,7 +14,10 @@ import { WantedGuService } from '../wantedGu/watnedGu.service';
 import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
-import { fetchBestSitterUserReturn } from './interfaces/users.interface';
+import {
+  FetchUserPhoneNumReturn,
+  fetchBestSitterUserReturn,
+} from './interfaces/users.interface';
 
 @Injectable()
 export class UsersService {
@@ -57,6 +60,28 @@ export class UsersService {
     return await this.usersRepository.findOne({
       where: { phoneNum },
     });
+  }
+
+  async findOneByUserId({
+    userId,
+  }: {
+    userId: string;
+  }): Promise<FetchUserPhoneNumReturn> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user)
+      throw new UnprocessableEntityException('존재하지 않는 유저입니다.');
+
+    const result = {
+      id: user.id,
+      phoneNum: user.phoneNum,
+    };
+
+    return result;
   }
 
   async bestSitterFindAllByParentsUserId({
