@@ -72,9 +72,9 @@ export class UsersController {
     });
   }
 
-  @Get('/sitters')
+  @Get('/sitters/all/:parentsUserId')
   @ApiOperation({
-    summary: '전체 시니어 시터 목록 조회 API',
+    summary: '지역 전체 시니어 시터 목록 조회 API',
   })
   @ApiResponse({
     status: 200,
@@ -85,8 +85,8 @@ export class UsersController {
     status: 422,
     description: '조회 실패',
   })
-  fetchSitterUsers() {
-    return this.usersService.sitterFindAll();
+  fetchSitterUsers(@Param('parentsUserId') parentsUserId: string) {
+    return this.usersService.sitterFindAll({ parentsUserId });
   }
 
   @Post('parents')

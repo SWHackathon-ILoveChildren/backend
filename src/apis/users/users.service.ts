@@ -141,8 +141,55 @@ export class UsersService {
     return result;
   }
 
-  sitterFindAll() {
-    //
+  async sitterFindAll({ parentsUserId }) {
+    const parentsUser = await this.parentsUserFindOneById({ parentsUserId });
+
+    if (!parentsUser || parentsUser.userType !== 'PARENTS')
+      throw new UnprocessableEntityException('부모 유저를 찾을 수 없습니다.');
+
+    const wantedGuId = parentsUser.wantedGues[0].id;
+
+    const wantedGu = await this.wantedGuService.findOneByWantedGuId({
+      wantedGuId,
+    });
+
+    if (!wantedGu)
+      throw new UnprocessableEntityException('원하는 구를 찾을 수 없습니다.');
+
+    const sitterUsers = await this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoin('user.wantedGues', 'wantedGu')
+      .leftJoinAndSelect('user.careTypes', 'careType')
+      .leftJoinAndSelect('user.userChildTypes', 'userChildType')
+      .leftJoinAndSelect('userChildType.childTypes', 'childType')
+      .where('user.userType = :userType', { userType: 'SITTER' })
+      .andWhere('wantedGu.gu = :gu', { gu: wantedGu.gu.id })
+      .orderBy('user.createdAt', 'ASC')
+      .getMany();
+
+    const sitterUserIds = sitterUsers.map((sitterUser) => {
+      const sitterUserInfo = {
+        sitterUserId: sitterUser.id,
+        sitterUserName: sitterUser.name,
+        sitterUserCreatedAt: sitterUser.createdAt,
+        sitterUserCareType: sitterUser.careTypes,
+        sitterUserChildType: sitterUser.userChildTypes,
+      };
+      return sitterUserInfo;
+    });
+
+    const result = sitterUserIds.map((el) => ({
+      sitterUserName: el.sitterUserName,
+      sitterUserCreatedAt: el.sitterUserCreatedAt,
+      sitterUserCareTypeNames: el.sitterUserCareType.map(
+        (careType) => careType.name
+      ),
+      sitterUserChildTypeNames: el.sitterUserChildType.map(
+        (childType) => childType.childTypes.name
+      ),
+    }));
+
+    return result;
   }
 
   async createParent(createUserDto) {
@@ -190,7 +237,7 @@ export class UsersService {
     }
 
     // 부모 회원 돌봄 받길 원하는 지역
-    const wantedGu = await this.guService.findByWantedGuName(wantedGuName);
+    const wantedGu = await this.guService.findByWantedGuName({ wantedGuName });
     await this.wantedGuService.addWantedGu({
       guId: wantedGu.id,
       userId: user.id,
