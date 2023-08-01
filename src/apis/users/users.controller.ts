@@ -72,6 +72,23 @@ export class UsersController {
     });
   }
 
+  @Get('/sitters')
+  @ApiOperation({
+    summary: '전체 시니어 시터 목록 조회 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    // type:
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  fetchSitterUsers() {
+    return this.usersService.sitterFindAll();
+  }
+
   @Post('parents')
   @ApiOperation({
     summary: '부모 유저 생성 API',

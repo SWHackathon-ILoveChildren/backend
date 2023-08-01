@@ -141,6 +141,10 @@ export class UsersService {
     return result;
   }
 
+  sitterFindAll() {
+    //
+  }
+
   async createParent(createUserDto) {
     const {
       phoneNum,
