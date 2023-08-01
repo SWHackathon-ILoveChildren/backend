@@ -23,7 +23,18 @@ export class ChildrenService {
     return children;
   }
 
-  async findAllByParentsUserId({ parentsUserId }) {}
+  async findAllByParentsUserId({ parentsUserId }) {
+    return await this.childrenRepository.find({
+      where: {
+        user: {
+          id: parentsUserId,
+        },
+      },
+      order: {
+        birth: 'ASC',
+      },
+    });
+  }
 
   async addChildren({
     childrenBirths,

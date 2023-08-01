@@ -9,6 +9,7 @@ export class ChildrenController {
   @Get(':parentsUserId')
   @ApiOperation({
     summary: '내 아이 전체 조회 API',
+    description: '생년월일 순으로 조회 됩니다.',
   })
   @ApiResponse({
     status: 200,
