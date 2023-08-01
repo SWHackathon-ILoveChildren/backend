@@ -5,3 +5,5 @@ export class CreateChildTypeReturn extends PickType(ChildType, [
   'id',
   'name',
 ] as const) {}
+
+export class FetchChildTypeReturn extends CreateChildTypeReturn {}

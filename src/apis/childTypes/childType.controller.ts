@@ -1,12 +1,28 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ChildTypeService } from './childType.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateChildTypeDto } from './dto/createChildType.dto';
-import { CreateChildTypeReturn } from './interfaces/childTypes.interface';
+import {
+  CreateChildTypeReturn,
+  FetchChildTypeReturn,
+} from './interfaces/childTypes.interface';
 
 @Controller('childType')
 export class ChildTypeController {
   constructor(private childTypeService: ChildTypeService) {}
+
+  @Get()
+  @ApiOperation({
+    summary: '아이 타입 조회 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    type: [FetchChildTypeReturn],
+  })
+  fetchChildType(): Promise<FetchChildTypeReturn[]> {
+    return this.childTypeService.findAllByName();
+  }
 
   @Post()
   @ApiOperation({

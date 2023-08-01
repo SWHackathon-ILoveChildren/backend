@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ChildType } from './entities/childType.entity';
 import { Repository } from 'typeorm';
 import { CreateChildTypeDto } from './dto/createChildType.dto';
+import { FetchChildTypeReturn } from './interfaces/childTypes.interface';
 
 @Injectable()
 export class ChildTypeService {
@@ -26,6 +27,10 @@ export class ChildTypeService {
 
     if (childTypeName)
       throw new UnprocessableEntityException('이미 등록된 아이 타입입니다.');
+  }
+
+  async findAllByName(): Promise<FetchChildTypeReturn[]> {
+    return await this.childTypeRepository.find();
   }
 
   async create(createChildTypeDto: CreateChildTypeDto) {
