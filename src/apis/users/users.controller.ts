@@ -6,29 +6,29 @@ import {
   CreateParentsUsers,
   CreateSitterUsers,
   FetchUserPhoneNumReturn,
+  FetchUserReturn,
   fetchBestSitterUserReturn,
 } from './interfaces/users.interface';
 import { CreateSittersDto } from './dto/createSitters.dto';
-import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Get(':phoneNum')
+  @Get()
   @ApiOperation({
-    summary: '유저 조회 API',
+    summary: '유저 PhoneNum 기반 해당 유저 조회 API',
   })
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    type: User,
+    type: FetchUserReturn,
   })
   @ApiResponse({
     status: 422,
     description: '조회 실패',
   })
-  fetchUser(@Param('phoneNum') phoneNum: string) {
+  fetchUser(@Query('phoneNum') phoneNum: string): Promise<FetchUserReturn> {
     return this.usersService.findOneByPhoneNum({ phoneNum });
   }
 
