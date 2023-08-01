@@ -5,6 +5,7 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
   CreateParentsUsers,
   CreateSitterUsers,
+  FetchSitterUsersReturn,
   FetchUserPhoneNumReturn,
   FetchUserReturn,
   fetchBestSitterUserReturn,
@@ -79,13 +80,15 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    // type:
+    type: [FetchSitterUsersReturn],
   })
   @ApiResponse({
     status: 422,
     description: '조회 실패',
   })
-  fetchSitterUsers(@Param('parentsUserId') parentsUserId: string) {
+  fetchSitterUsers(
+    @Param('parentsUserId') parentsUserId: string
+  ): Promise<FetchSitterUsersReturn[]> {
     return this.usersService.sitterFindAll({ parentsUserId });
   }
 

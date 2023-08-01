@@ -15,6 +15,7 @@ import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
 import {
+  FetchSitterUsersReturn,
   FetchUserPhoneNumReturn,
   fetchBestSitterUserReturn,
 } from './interfaces/users.interface';
@@ -141,7 +142,11 @@ export class UsersService {
     return result;
   }
 
-  async sitterFindAll({ parentsUserId }) {
+  async sitterFindAll({
+    parentsUserId,
+  }: {
+    parentsUserId: string;
+  }): Promise<FetchSitterUsersReturn[]> {
     const parentsUser = await this.parentsUserFindOneById({ parentsUserId });
 
     if (!parentsUser || parentsUser.userType !== 'PARENTS')
@@ -179,6 +184,7 @@ export class UsersService {
     });
 
     const result = sitterUserIds.map((el) => ({
+      sitterUserId: el.sitterUserId,
       sitterUserName: el.sitterUserName,
       sitterUserCreatedAt: el.sitterUserCreatedAt,
       sitterUserCareTypeNames: el.sitterUserCareType.map(
