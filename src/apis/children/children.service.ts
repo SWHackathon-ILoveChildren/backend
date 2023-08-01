@@ -11,7 +11,7 @@ export class ChildrenService {
     private childrenRepository: Repository<Children>
   ) {}
 
-  async findOneById({ childrenId }) {
+  async findOneById({ childrenId }: { childrenId: string }) {
     const children = await this.childrenRepository.findOne({
       where: { id: childrenId },
       relations: ['user'],
@@ -23,7 +23,7 @@ export class ChildrenService {
     return children;
   }
 
-  async findAllByParentsUserId({ parentsUserId }) {
+  async findAllByParentsUserId({ parentsUserId }: { parentsUserId: string }) {
     return await this.childrenRepository.find({
       where: {
         user: {
