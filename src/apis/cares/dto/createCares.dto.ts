@@ -1,6 +1,6 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Care } from '../entities/care.entity';
-import { IsNotEmpty, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateCaresDto extends PickType(Care, [
   'date',
@@ -22,4 +22,13 @@ export class CreateCaresDto extends PickType(Care, [
   @IsUUID()
   @IsNotEmpty()
   childrenId: string;
+
+  @ApiProperty({
+    description:
+      '회원가입 시 진행한 휴대폰 번호와 시터와 소통할 휴대폰 번호가 다를 경우 기입',
+    example: '01012345678',
+    required: false,
+  })
+  @IsString()
+  contactPhoneNumber?: string;
 }
