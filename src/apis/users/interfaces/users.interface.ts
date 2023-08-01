@@ -49,3 +49,22 @@ export class fetchBestSitterUserReturn {
   })
   sitterUserChildTypeNames: string[];
 }
+
+export class FetchUserPhoneNumReturn extends PickType(User, [
+  'id',
+  'phoneNum',
+] as const) {}
+
+export class FetchUserReturn extends OmitType(CreateParentsUsers, [
+  'introduction',
+] as const) {
+  @ApiProperty({
+    example: '안녕하세요. 김미나입니다.',
+  })
+  introduction: string;
+
+  @ApiProperty({
+    example: '01012345678',
+  })
+  contactPhoneNumber: string;
+}

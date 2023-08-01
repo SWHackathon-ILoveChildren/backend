@@ -1,34 +1,54 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateParentsDto } from './dto/createParents.dto';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
   CreateParentsUsers,
   CreateSitterUsers,
+  FetchUserPhoneNumReturn,
+  FetchUserReturn,
   fetchBestSitterUserReturn,
 } from './interfaces/users.interface';
 import { CreateSittersDto } from './dto/createSitters.dto';
-import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Get(':phoneNum')
+  @Get()
   @ApiOperation({
-    summary: '유저 조회 API',
+    summary: '유저 PhoneNum 기반 해당 유저 조회 API',
   })
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    type: User,
+    type: FetchUserReturn,
   })
   @ApiResponse({
     status: 422,
     description: '조회 실패',
   })
-  fetchUser(@Param('phoneNum') phoneNum: string) {
+  fetchUser(@Query('phoneNum') phoneNum: string): Promise<FetchUserReturn> {
     return this.usersService.findOneByPhoneNum({ phoneNum });
+  }
+
+  @Get(':userId')
+  @ApiOperation({
+    summary: '유저 Id 기반 휴대폰 번호 조회 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    type: FetchUserPhoneNumReturn,
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  fetchUserPhoneNum(
+    @Param('userId') userId: string
+  ): Promise<FetchUserPhoneNumReturn> {
+    return this.usersService.findOneByUserId({ userId });
   }
 
   @Get('/sitters/:parentsUserId')
