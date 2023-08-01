@@ -68,3 +68,5 @@ export class FetchUserReturn extends OmitType(CreateParentsUsers, [
   })
   contactPhoneNumber: string;
 }
+
+export class FetchSitterUsersReturn extends fetchBestSitterUserReturn {}
