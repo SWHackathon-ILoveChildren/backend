@@ -1,6 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ChildrenService } from './children.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { FetchAllChildrenReturn } from './interfaces/children.interface';
 
 @Controller('children')
 export class ChildrenController {
@@ -14,9 +15,11 @@ export class ChildrenController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    // type:
+    type: [FetchAllChildrenReturn],
   })
-  fetchAllChildren(@Param('parentsUserId') parentsUserId: string) {
+  fetchAllChildren(
+    @Param('parentsUserId') parentsUserId: string
+  ): Promise<FetchAllChildrenReturn[]> {
     return this.childrenService.findAllByParentsUserId({ parentsUserId });
   }
 }
