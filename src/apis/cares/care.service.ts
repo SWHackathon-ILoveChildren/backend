@@ -17,11 +17,17 @@ export class CaresService {
   ) {}
 
   async create({ parentsUserId, ...createCaresDto }) {
-    const { date, childrenId, sitterUserId, ...rest } = createCaresDto;
+    const { date, childrenId, sitterUserId, contactPhoneNumber, ...rest } =
+      createCaresDto;
 
     const parentsUser = await this.usersService.parentsUserFindOneById({
       parentsUserId,
     });
+
+    // 시터와 소통활 휴대폰 번호가 유저 휴대폰번호랑 다를 경우, 시터와 소통할 휴대폰 번호로 업데이트
+    if (parentsUser.phoneNum !== contactPhoneNumber) {
+      // await this.usersService.
+    }
 
     const sitterUser = await this.usersService.sitterUserFindOneById({
       sitterUserId,
@@ -39,22 +45,28 @@ export class CaresService {
         '아이의 정보가 올바르지 않습니다.'
       );
 
-    if (
-      parentsUser.userType === 'PARENTS' &&
-      sitterUser.userType === 'SITTER'
-    ) {
-      return await this.caresRepository.save({
-        ...rest,
-        date,
-        careStatus: STATUS_TYPE_ENUM.SCHEDULE,
-        children,
-        parentsUser,
-        sitterUser,
-      });
-    } else {
-      throw new UnprocessableEntityException(
-        '부모 회원 또는 시니어시터 회원의 정보가 올바르지 않습니다.'
-      );
-    }
+    console.log('💛', parentsUser);
+
+    // let saveResult;
+    // if (
+    //   parentsUser.userType === 'PARENTS' &&
+    //   sitterUser.userType === 'SITTER'
+    // ) {
+    //   saveResult = await this.caresRepository.save({
+    //     ...rest,
+    //     date,
+    //     careStatus: STATUS_TYPE_ENUM.SCHEDULE,
+    //     children,
+    //     parentsUser,
+    //     sitterUser,
+    //   });
+    // } else {
+    //   throw new UnprocessableEntityException(
+    //     '부모 회원 또는 시니어시터 회원의 정보가 올바르지 않습니다.'
+    //   );
+    // }
+
+    // console.log(saveResult);
+    // return saveResult;
   }
 }
