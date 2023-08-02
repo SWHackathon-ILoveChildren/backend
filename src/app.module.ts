@@ -12,6 +12,7 @@ import { CaresModule } from './apis/cares/care.module';
 import { AuthModule } from './apis/auth/auth.module';
 import { ChildTypeModule } from './apis/childTypes/childType.module';
 import { UserChildTypesModule } from './apis/userChildType/userChileTypes.module';
+import { FilesModule } from './apis/files/files.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserChildTypesModule } from './apis/userChildType/userChileTypes.module
     CareTypesModule,
     ChildrenModule,
     ChildTypeModule,
+    FilesModule,
     GuModule,
     UsersModule,
     UserChildTypesModule,
