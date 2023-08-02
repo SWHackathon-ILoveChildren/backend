@@ -11,7 +11,7 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUploadDto } from './dto/fildUpload.dto';
 
 @Controller('files')
@@ -32,7 +32,11 @@ export class FilesController {
   @ApiResponse({
     status: 201,
     description: '업로드 성공',
-    // type:
+    schema: {
+      type: 'string',
+      example:
+        'https://storage.googleapis.com /karuru-storage/2023-08-02/609f754d-ec57-4ba7-91a3-4b53245f0f37/2.jpeg',
+    },
   })
   @ApiResponse({
     status: 422,
@@ -41,8 +45,7 @@ export class FilesController {
   async uploadFile(
     @UploadedFile()
     file: Express.Multer.File
-  ) {
-    console.log(file);
+  ): Promise<string> {
     return await this.filesService.uploadImages({ file });
   }
 }
