@@ -2,6 +2,7 @@ import { ImagesService } from './images.service';
 import { Body, Controller, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { SaveImagesDto } from './dto/saveImages.dto';
+import { SaveImagesReturn } from './interfaces/images.interface';
 
 @Controller('images')
 export class ImagesController {
@@ -15,7 +16,7 @@ export class ImagesController {
   @ApiResponse({
     status: 201,
     description: '저장 성공',
-    // type:
+    type: SaveImagesReturn,
   })
   @ApiResponse({
     status: 422,
@@ -24,7 +25,7 @@ export class ImagesController {
   saveImages(
     @Param('sitterUserId') sitterUserId: string,
     @Body() saveImagesDto: SaveImagesDto
-  ) {
+  ): Promise<SaveImagesReturn> {
     return this.imagesService.save({ sitterUserId, saveImagesDto });
   }
 }

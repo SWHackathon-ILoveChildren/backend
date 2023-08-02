@@ -3,6 +3,7 @@ import { Image } from './entities/image.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from '../users/users.service';
+import { IImagesSave, SaveImagesReturn } from './interfaces/images.interface';
 
 @Injectable()
 export class ImagesService {
@@ -13,7 +14,10 @@ export class ImagesService {
     private usersService: UsersService
   ) {}
 
-  async save({ sitterUserId, saveImagesDto }) {
+  async save({
+    sitterUserId,
+    saveImagesDto,
+  }: IImagesSave): Promise<SaveImagesReturn> {
     this.usersService.sitterUserFindOneById({ sitterUserId });
 
     const saveResult = await this.imagesRepository.save({
