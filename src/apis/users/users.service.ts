@@ -14,7 +14,11 @@ import { WantedGuService } from '../wantedGu/watnedGu.service';
 import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
-import { FetchUserPhoneNumReturn } from './interfaces/users.interface';
+import {
+  FetchUserPhoneNumReturn,
+  IUsersServiceSitterFindByParentsUserId,
+  IUsersServiceSitterFindByParentsUserIdReturn,
+} from './interfaces/users.interface';
 
 @Injectable()
 export class UsersService {
@@ -81,7 +85,12 @@ export class UsersService {
     return result;
   }
 
-  async sitterFindByParentsUserId({ parentsUserId, returnCount }) {
+  async sitterFindByParentsUserId({
+    parentsUserId,
+    returnCount,
+  }: IUsersServiceSitterFindByParentsUserId): Promise<
+    IUsersServiceSitterFindByParentsUserIdReturn[]
+  > {
     const parentsUser = await this.parentsUserFindOneById({ parentsUserId });
 
     if (!parentsUser || parentsUser.userType !== 'PARENTS') {

@@ -1,6 +1,11 @@
 import { ApiProperty, PickType, OmitType } from '@nestjs/swagger';
 import { User } from '../entities/user.entity';
 
+export class IUsersServiceSitterFindByParentsUserId {
+  parentsUserId: string;
+  returnCount?: number;
+}
+
 export class CreateParentsUsers extends PickType(User, [
   'id',
   'name',
@@ -70,3 +75,5 @@ export class FetchUserReturn extends OmitType(CreateParentsUsers, [
 }
 
 export class FetchSitterUsersReturn extends fetchBestSitterUserReturn {}
+
+export class IUsersServiceSitterFindByParentsUserIdReturn extends fetchBestSitterUserReturn {}
