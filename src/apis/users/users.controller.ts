@@ -5,6 +5,7 @@ import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import {
   CreateParentsUsers,
   CreateSitterUsers,
+  FetchNearbyJobsReturn,
   FetchSitterUsersReturn,
   FetchUserPhoneNumReturn,
   FetchUserReturn,
@@ -113,7 +114,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    // type:
+    type: [FetchNearbyJobsReturn],
   })
   @ApiResponse({
     status: 422,
@@ -122,7 +123,7 @@ export class UsersController {
   fetchNearbyJobs(
     @Param('sitterUserId') sitterUserId: string,
     @Query('returnCount') returnCount: number
-  ) {
+  ): Promise<FetchNearbyJobsReturn[]> {
     return this.usersService.parentsFindBySitterUserId({
       sitterUserId,
       returnCount,

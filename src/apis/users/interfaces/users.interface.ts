@@ -6,6 +6,11 @@ export class IUsersServiceSitterFindByParentsUserId {
   returnCount?: number;
 }
 
+export class IUsersServiceParentsFindBySitterUserId {
+  sitterUserId: string;
+  returnCount?: number;
+}
+
 export class CreateParentsUsers extends PickType(User, [
   'id',
   'name',
@@ -77,3 +82,28 @@ export class FetchUserReturn extends OmitType(CreateParentsUsers, [
 export class FetchSitterUsersReturn extends fetchBestSitterUserReturn {}
 
 export class IUsersServiceSitterFindByParentsUserIdReturn extends fetchBestSitterUserReturn {}
+
+export class FetchNearbyJobsReturn {
+  @ApiProperty({
+    example: 'c4b5617e-f8ce-4650-b50a-bb7e09b75ef2',
+  })
+  parentsUserId: string;
+
+  @ApiProperty({
+    example: '2023-07-31T08:46:05.979Z',
+    description: '가입순이 맞는 확인용',
+  })
+  parentsUserCreatedAt: Date;
+
+  @ApiProperty({
+    type: [String],
+    example: ['202301', '202111'],
+  })
+  parentsUserChildren: string[];
+
+  @ApiProperty({
+    type: [String],
+    example: ['등하원 돌봄', '아픈아이 돌봄'],
+  })
+  parentsUserCareTypeNames: string[];
+}
