@@ -104,6 +104,31 @@ export class UsersController {
     });
   }
 
+  @Get('/parents/:sitterUserId')
+  @ApiOperation({
+    summary: '주변 돌봄 일자리 조회 API',
+    description: 'returnCount에 3 입력하면, 주변 돌봄 일자리 3개 조회 가능',
+  })
+  @ApiQuery({ name: 'returnCount', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    // type:
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  fetchNearbyJobs(
+    @Param('sitterUserId') sitterUserId: string,
+    @Query('returnCount') returnCount: number
+  ) {
+    return this.usersService.parentsFindBySitterUserId({
+      sitterUserId,
+      returnCount,
+    });
+  }
+
   @Post('parents')
   @ApiOperation({
     summary: '부모 유저 생성 API',
