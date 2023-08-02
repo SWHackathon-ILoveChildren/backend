@@ -1,4 +1,4 @@
-import { Profile } from 'src/apis/profiles/entities/profile.entity';
+import { User } from 'src/apis/users/entities/user.entity';
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
@@ -9,6 +9,6 @@ export class Image {
   @Column()
   url: string;
 
-  @ManyToOne(() => Profile)
-  profile: Profile;
+  @ManyToOne(() => User, (users) => users.images)
+  users: User;
 }

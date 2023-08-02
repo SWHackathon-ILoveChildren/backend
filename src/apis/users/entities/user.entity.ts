@@ -15,6 +15,7 @@ import { CareType } from 'src/apis/careType/entities/careType.entity';
 import { WantedGu } from 'src/apis/wantedGu/entities/wantedGu.entity';
 import { Care } from 'src/apis/cares/entities/care.entity';
 import { UserChildType } from 'src/apis/userChildType/entities/userChildType.entity';
+import { Image } from 'src/apis/images/entities/image.entity';
 
 @Entity()
 export class User {
@@ -125,4 +126,10 @@ export class User {
   })
   @OneToMany(() => UserChildType, (userChildTypes) => userChildTypes.users)
   userChildTypes: UserChildType[];
+
+  @ApiProperty({
+    type: () => [UserChildType],
+  })
+  @OneToMany(() => Image, (images) => images.users)
+  images: Image;
 }
