@@ -10,16 +10,20 @@ export class FilesService {
       projectId: process.env.PROJECTID,
     }).bucket(bucketName);
 
-    const upload = await new Promise<string>((resolve, reject) =>
-      file
-        .createReadStream()
-        .pipe(storage.file(file.filename).createWriteStream())
-        .on('finish', () => resolve(`/${bucketName}/${file.filename}`))
-        .on('error', (error) => reject(error))
-    );
+    // const upload = await new Promise<string>((resolve, reject) =>
+    //   file
+    //     .createReadStream()
+    //     .pipe(storage.file(file.filename).createWriteStream())
+    //     .on('finish', () => resolve(`/${bucketName}/${file.filename}`))
+    //     .on('error', (error) => reject(error))
+    // );
+    const uploadPromises = file.map((file) => {
+      //   return storage.bucket(bucketName).upload(file.path, {});
+    });
 
-    console.log(upload);
+    // await Promise.all(uploadPromises);
 
-    return upload;
+    return uploadPromises;
+    // return upload;
   }
 }

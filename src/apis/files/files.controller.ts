@@ -11,7 +11,7 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { FileUploadDto } from './dto/fildUpload.dto';
 
 @Controller('files')
@@ -19,6 +19,7 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Post()
+  @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({
     summary: '시니어시터 수료증 이미지 업로드 API',
@@ -37,11 +38,11 @@ export class FilesController {
     status: 422,
     description: '업로드 실패',
   })
-  @UseInterceptors(FilesInterceptor('file', 1))
-  async uploadFiles(
+  async uploadFile(
     @UploadedFile()
     file: Express.Multer.File
   ) {
+    console.log(file);
     return await this.filesService.uploadImages({ file });
   }
 }
