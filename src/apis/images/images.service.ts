@@ -14,12 +14,17 @@ export class ImagesService {
   ) {}
 
   async save({ sitterUserId, saveImagesDto }) {
-    const user = this.usersService.sitterUserFindOneById({ sitterUserId });
+    this.usersService.sitterUserFindOneById({ sitterUserId });
 
-    const result = await this.imagesRepository.save({
-      url: saveImagesDto,
+    const saveResult = await this.imagesRepository.save({
+      url: saveImagesDto.url,
+      users: {
+        id: sitterUserId,
+      },
     });
 
-    console.log(result);
+    return {
+      id: saveResult.id,
+    };
   }
 }
