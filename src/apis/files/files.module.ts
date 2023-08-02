@@ -6,7 +6,7 @@ import { Image } from '../images/entities/image.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Image])],
-  providers: [FilesController],
-  controllers: [FilesService],
+  providers: [FilesService],
+  controllers: [FilesController],
 })
-export class GuModule {}
+export class FilesModule {}

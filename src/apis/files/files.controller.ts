@@ -5,8 +5,14 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
-import { ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileUploadDto } from './dto/fildUpload.dto';
 
 @Controller('files')
 export class FilesController {
@@ -18,6 +24,9 @@ export class FilesController {
     summary: '시니어시터 수료증 이미지 업로드 API',
     description:
       'field key는 "file", 갯수 제한 1개, 업로드된 이미지는 GCP BUCKET 내 존재',
+  })
+  @ApiBody({
+    type: FileUploadDto,
   })
   @ApiResponse({
     status: 201,
@@ -33,6 +42,6 @@ export class FilesController {
     @UploadedFile()
     file: Express.Multer.File
   ) {
-    // return await this.filesService.uploadImages(file);
+    return await this.filesService.uploadImages({ file });
   }
 }
