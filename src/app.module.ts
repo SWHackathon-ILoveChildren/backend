@@ -13,6 +13,7 @@ import { AuthModule } from './apis/auth/auth.module';
 import { ChildTypeModule } from './apis/childTypes/childType.module';
 import { UserChildTypesModule } from './apis/userChildType/userChileTypes.module';
 import { FilesModule } from './apis/files/files.module';
+import { ImagesModule } from './apis/images/images.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { FilesModule } from './apis/files/files.module';
     ChildTypeModule,
     FilesModule,
     GuModule,
+    ImagesModule,
     UsersModule,
     UserChildTypesModule,
     WantedGuModule,
