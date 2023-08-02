@@ -6,6 +6,7 @@ import {
   CreateParentsUsers,
   CreateSitterUsers,
   FetchNearbyJobsReturn,
+  FetchParentsUsersReturn,
   FetchSitterUsersReturn,
   FetchUserPhoneNumReturn,
   FetchUserReturn,
@@ -124,6 +125,31 @@ export class UsersController {
     @Param('sitterUserId') sitterUserId: string,
     @Query('returnCount') returnCount: number
   ): Promise<FetchNearbyJobsReturn[]> {
+    return this.usersService.parentsFindBySitterUserId({
+      sitterUserId,
+      returnCount,
+    });
+  }
+
+  @Get('/parents/all/:sitterUserId')
+  @ApiOperation({
+    summary: '지역 전체 부모 목록 조회 API',
+    description: 'returnCount을 입력하지 않으면, 지역 전체 부모 조회 가능',
+  })
+  @ApiQuery({ name: 'returnCount', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    type: FetchParentsUsersReturn,
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  fetchParentsUsers(
+    @Param('sitterUserId') sitterUserId: string,
+    @Query('returnCount') returnCount: number
+  ): Promise<FetchParentsUsersReturn[]> {
     return this.usersService.parentsFindBySitterUserId({
       sitterUserId,
       returnCount,

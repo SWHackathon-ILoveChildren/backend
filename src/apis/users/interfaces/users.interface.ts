@@ -107,3 +107,7 @@ export class FetchNearbyJobsReturn {
   })
   parentsUserCareTypeNames: string[];
 }
+
+export class IUsersServiceParentsFindBySitterUserIdReturn extends FetchNearbyJobsReturn {}
+
+export class FetchParentsUsersReturn extends FetchNearbyJobsReturn {}
