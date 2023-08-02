@@ -15,9 +15,9 @@ import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
 import {
-  FetchSitterUsersReturn,
   FetchUserPhoneNumReturn,
-  fetchBestSitterUserReturn,
+  IUsersServiceSitterFindByParentsUserId,
+  IUsersServiceSitterFindByParentsUserIdReturn,
 } from './interfaces/users.interface';
 
 @Injectable()
@@ -85,15 +85,17 @@ export class UsersService {
     return result;
   }
 
-  async bestSitterFindAllByParentsUserId({
+  async sitterFindByParentsUserId({
     parentsUserId,
-  }: {
-    parentsUserId: string;
-  }): Promise<fetchBestSitterUserReturn[]> {
+    returnCount,
+  }: IUsersServiceSitterFindByParentsUserId): Promise<
+    IUsersServiceSitterFindByParentsUserIdReturn[]
+  > {
     const parentsUser = await this.parentsUserFindOneById({ parentsUserId });
 
-    if (!parentsUser || parentsUser.userType !== 'PARENTS')
+    if (!parentsUser || parentsUser.userType !== 'PARENTS') {
       throw new UnprocessableEntityException('부모 유저를 찾을 수 없습니다.');
+    }
 
     const wantedGuId = parentsUser.wantedGues[0].id;
 
@@ -101,8 +103,9 @@ export class UsersService {
       wantedGuId,
     });
 
-    if (!wantedGu)
+    if (!wantedGu) {
       throw new UnprocessableEntityException('원하는 구를 찾을 수 없습니다.');
+    }
 
     const sitterUsers = await this.usersRepository
       .createQueryBuilder('user')
@@ -113,63 +116,7 @@ export class UsersService {
       .where('user.userType = :userType', { userType: 'SITTER' })
       .andWhere('wantedGu.gu = :gu', { gu: wantedGu.gu.id })
       .orderBy('user.createdAt', 'ASC')
-      .take(3)
-      .getMany();
-
-    const sitterUserIds = sitterUsers.map((sitterUser) => {
-      const sitterUserInfo = {
-        sitterUserId: sitterUser.id,
-        sitterUserName: sitterUser.name,
-        sitterUserCreatedAt: sitterUser.createdAt,
-        sitterUserCareType: sitterUser.careTypes,
-        sitterUserChildType: sitterUser.userChildTypes,
-      };
-      return sitterUserInfo;
-    });
-
-    const result = sitterUserIds.map((el) => ({
-      sitterUserId: el.sitterUserId,
-      sitterUserName: el.sitterUserName,
-      sitterUserCreatedAt: el.sitterUserCreatedAt,
-      sitterUserCareTypeNames: el.sitterUserCareType.map(
-        (careType) => careType.name
-      ),
-      sitterUserChildTypeNames: el.sitterUserChildType.map(
-        (childType) => childType.childTypes.name
-      ),
-    }));
-
-    return result;
-  }
-
-  async sitterFindAll({
-    parentsUserId,
-  }: {
-    parentsUserId: string;
-  }): Promise<FetchSitterUsersReturn[]> {
-    const parentsUser = await this.parentsUserFindOneById({ parentsUserId });
-
-    if (!parentsUser || parentsUser.userType !== 'PARENTS')
-      throw new UnprocessableEntityException('부모 유저를 찾을 수 없습니다.');
-
-    const wantedGuId = parentsUser.wantedGues[0].id;
-
-    const wantedGu = await this.wantedGuService.findOneByWantedGuId({
-      wantedGuId,
-    });
-
-    if (!wantedGu)
-      throw new UnprocessableEntityException('원하는 구를 찾을 수 없습니다.');
-
-    const sitterUsers = await this.usersRepository
-      .createQueryBuilder('user')
-      .leftJoin('user.wantedGues', 'wantedGu')
-      .leftJoinAndSelect('user.careTypes', 'careType')
-      .leftJoinAndSelect('user.userChildTypes', 'userChildType')
-      .leftJoinAndSelect('userChildType.childTypes', 'childType')
-      .where('user.userType = :userType', { userType: 'SITTER' })
-      .andWhere('wantedGu.gu = :gu', { gu: wantedGu.gu.id })
-      .orderBy('user.createdAt', 'ASC')
+      .take(returnCount || 0)
       .getMany();
 
     const sitterUserIds = sitterUsers.map((sitterUser) => {

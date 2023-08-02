@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateParentsDto } from './dto/createParents.dto';
 import { UsersService } from './users.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import {
   CreateParentsUsers,
   CreateSitterUsers,
@@ -55,7 +55,10 @@ export class UsersController {
   @Get('/sitters/:parentsUserId')
   @ApiOperation({
     summary: '지역 추천 시니어 시터 조회 API',
+    description:
+      'returnCount에 3 입력하면, 지역 추천 3명의 시니어시터 조회 가능',
   })
+  @ApiQuery({ name: 'returnCount', required: false, type: Number })
   @ApiResponse({
     status: 200,
     description: '조회 성공',
@@ -66,17 +69,22 @@ export class UsersController {
     description: '조회 실패',
   })
   fetchBestSitterUser(
-    @Param('parentsUserId') parentsUserId: string
+    @Param('parentsUserId') parentsUserId: string,
+    @Query('returnCount') returnCount: number
   ): Promise<fetchBestSitterUserReturn[]> {
-    return this.usersService.bestSitterFindAllByParentsUserId({
+    return this.usersService.sitterFindByParentsUserId({
       parentsUserId,
+      returnCount,
     });
   }
 
   @Get('/sitters/all/:parentsUserId')
   @ApiOperation({
     summary: '지역 전체 시니어 시터 목록 조회 API',
+    description:
+      'returnCount을 입력하지 않으면, 지역 전체 시니어시터 조회 가능',
   })
+  @ApiQuery({ name: 'returnCount', required: false, type: Number })
   @ApiResponse({
     status: 200,
     description: '조회 성공',
@@ -87,9 +95,13 @@ export class UsersController {
     description: '조회 실패',
   })
   fetchSitterUsers(
-    @Param('parentsUserId') parentsUserId: string
+    @Param('parentsUserId') parentsUserId: string,
+    @Query('returnCount') returnCount: number
   ): Promise<FetchSitterUsersReturn[]> {
-    return this.usersService.sitterFindAll({ parentsUserId });
+    return this.usersService.sitterFindByParentsUserId({
+      parentsUserId,
+      returnCount,
+    });
   }
 
   @Post('parents')
