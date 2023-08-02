@@ -168,7 +168,6 @@ export class UsersService {
       .leftJoin('user.wantedGues', 'wantedGu')
       .leftJoinAndSelect('user.careTypes', 'careType')
       .leftJoinAndSelect('user.userChildTypes', 'userChildType')
-      .leftJoinAndSelect('userChildType.childTypes', 'childType')
       .leftJoinAndSelect('user.childrens', 'children')
       .where('user.userType = :userType', { userType: 'PARENTS' })
       .andWhere('wantedGu.gu = :gu', { gu: wantedGu.gu.id })
@@ -176,18 +175,28 @@ export class UsersService {
       .take(returnCount || 0)
       .getMany();
 
-    console.log(parentsUsers);
+    const parentsUserIds = parentsUsers.map((parentsUser) => {
+      const parentsUserInfo = {
+        parentsUserId: parentsUser.id,
+        parentsUserCreatedAt: parentsUser.createdAt,
+        parentsUserChildren: parentsUser.childrens,
+        parentsUserCareType: parentsUser.careTypes,
+      };
+      return parentsUserInfo;
+    });
 
-    // const parentsUserIds = parentsUsers.map((parentsUser) => {
-    //   const parentsUserInfo = {
-    //     parentsUserId: parentsUser.id,
-    //     parentsUserCreatedAt: parentsUser.createdAt,
-    //     parentsUserChildren: parentsUser
-    //     parentsUserCareType: parentsUser.careTypes,
-    //     parentsUserChildType: parentsUser.userChildTypes,
-    //   };
-    //   return sitterUserInfo;
-    // });
+    const result = parentsUserIds.map((el) => ({
+      parentsUserId: el.parentsUserId,
+      parentsUserCreatedAt: el.parentsUserCreatedAt,
+      parentsUserChildren: el.parentsUserChildren.map(
+        (children) => children.birth
+      ),
+      parentsUserCareTypeNames: el.parentsUserCareType.map(
+        (careType) => careType.name
+      ),
+    }));
+
+    return result;
   }
 
   async createParent(createUserDto) {
