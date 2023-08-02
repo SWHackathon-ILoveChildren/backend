@@ -15,9 +15,9 @@ import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
 import {
-  FetchNearbyJobsReturn,
   FetchUserPhoneNumReturn,
   IUsersServiceParentsFindBySitterUserId,
+  IUsersServiceParentsFindBySitterUserIdReturn,
   IUsersServiceSitterFindByParentsUserId,
   IUsersServiceSitterFindByParentsUserIdReturn,
 } from './interfaces/users.interface';
@@ -150,7 +150,9 @@ export class UsersService {
   async parentsFindBySitterUserId({
     sitterUserId,
     returnCount,
-  }: IUsersServiceParentsFindBySitterUserId): Promise<FetchNearbyJobsReturn[]> {
+  }: IUsersServiceParentsFindBySitterUserId): Promise<
+    IUsersServiceParentsFindBySitterUserIdReturn[]
+  > {
     const sitterUser = await this.sitterUserFindOneById({ sitterUserId });
 
     if (!sitterUser || sitterUser.userType !== 'SITTER') {

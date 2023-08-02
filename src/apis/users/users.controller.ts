@@ -6,6 +6,7 @@ import {
   CreateParentsUsers,
   CreateSitterUsers,
   FetchNearbyJobsReturn,
+  FetchParentsUsersReturn,
   FetchSitterUsersReturn,
   FetchUserPhoneNumReturn,
   FetchUserReturn,
@@ -139,7 +140,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    // type:
+    type: FetchParentsUsersReturn,
   })
   @ApiResponse({
     status: 422,
@@ -148,7 +149,7 @@ export class UsersController {
   fetchParentsUsers(
     @Param('sitterUserId') sitterUserId: string,
     @Query('returnCount') returnCount: number
-  ) {
+  ): Promise<FetchParentsUsersReturn[]> {
     return this.usersService.parentsFindBySitterUserId({
       sitterUserId,
       returnCount,
