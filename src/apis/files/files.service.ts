@@ -1,5 +1,6 @@
 import { Storage } from '@google-cloud/storage';
 import { Injectable } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class FilesService {
@@ -8,22 +9,19 @@ export class FilesService {
     const storage = new Storage({
       keyFilename: process.env.KEYFILENAME,
       projectId: process.env.PROJECTID,
-    }).bucket(bucketName);
-
-    // const upload = await new Promise<string>((resolve, reject) =>
-    //   file
-    //     .createReadStream()
-    //     .pipe(storage.file(file.filename).createWriteStream())
-    //     .on('finish', () => resolve(`/${bucketName}/${file.filename}`))
-    //     .on('error', (error) => reject(error))
-    // );
-    const uploadPromises = file.map((file) => {
-      //   return storage.bucket(bucketName).upload(file.path, {});
     });
 
-    // await Promise.all(uploadPromises);
+    const bucket = storage.bucket(bucketName);
+    const destination = file.filename;
+    const path = `${getToday()}/${uuidv4()}/origin/${uuidv4()}`;
 
-    return uploadPromises;
-    // return upload;
+    console.log(storage);
+
+    await bucket.upload(file.path, {
+      gzip: true,
+      destination,
+    });
+
+    return `/${bucketName}/${destination}`;
   }
 }
