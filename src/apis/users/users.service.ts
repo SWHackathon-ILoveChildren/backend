@@ -145,6 +145,51 @@ export class UsersService {
     return result;
   }
 
+  async parentsFindBySitterUserId({ sitterUserId, returnCount }) {
+    const sitterUser = await this.sitterUserFindOneById({ sitterUserId });
+
+    if (!sitterUser || sitterUser.userType !== 'SITTER') {
+      throw new UnprocessableEntityException('시터 유저를 찾을 수 없습니다.');
+    }
+
+    console.log(sitterUser);
+    const wantedGuId = sitterUser.wantedGues[0].id;
+
+    const wantedGu = await this.wantedGuService.findOneByWantedGuId({
+      wantedGuId,
+    });
+
+    if (!wantedGu) {
+      throw new UnprocessableEntityException('원하는 구를 찾을 수 없습니다.');
+    }
+
+    const parentsUsers = await this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoin('user.wantedGues', 'wantedGu')
+      .leftJoinAndSelect('user.careTypes', 'careType')
+      .leftJoinAndSelect('user.userChildTypes', 'userChildType')
+      .leftJoinAndSelect('userChildType.childTypes', 'childType')
+      .leftJoinAndSelect('user.childrens', 'children')
+      .where('user.userType = :userType', { userType: 'PARENTS' })
+      .andWhere('wantedGu.gu = :gu', { gu: wantedGu.gu.id })
+      .orderBy('user.createdAt', 'ASC')
+      .take(returnCount || 0)
+      .getMany();
+
+    console.log(parentsUsers);
+
+    // const parentsUserIds = parentsUsers.map((parentsUser) => {
+    //   const parentsUserInfo = {
+    //     parentsUserId: parentsUser.id,
+    //     parentsUserCreatedAt: parentsUser.createdAt,
+    //     parentsUserChildren: parentsUser
+    //     parentsUserCareType: parentsUser.careTypes,
+    //     parentsUserChildType: parentsUser.userChildTypes,
+    //   };
+    //   return sitterUserInfo;
+    // });
+  }
+
   async createParent(createUserDto) {
     const {
       phoneNum,
