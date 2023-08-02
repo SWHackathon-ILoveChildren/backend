@@ -15,7 +15,9 @@ import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
 import {
+  FetchNearbyJobsReturn,
   FetchUserPhoneNumReturn,
+  IUsersServiceParentsFindBySitterUserId,
   IUsersServiceSitterFindByParentsUserId,
   IUsersServiceSitterFindByParentsUserIdReturn,
 } from './interfaces/users.interface';
@@ -48,7 +50,7 @@ export class UsersService {
   async sitterUserFindOneById({ sitterUserId }) {
     const sitterUser = await this.usersRepository.findOne({
       where: { id: sitterUserId },
-      relations: ['cares', 'careTypes', 'userChildTypes'],
+      relations: ['wantedGues', 'cares', 'careTypes', 'userChildTypes'],
     });
 
     if (!sitterUser)
@@ -139,6 +141,63 @@ export class UsersService {
       ),
       sitterUserChildTypeNames: el.sitterUserChildType.map(
         (childType) => childType.childTypes.name
+      ),
+    }));
+
+    return result;
+  }
+
+  async parentsFindBySitterUserId({
+    sitterUserId,
+    returnCount,
+  }: IUsersServiceParentsFindBySitterUserId): Promise<FetchNearbyJobsReturn[]> {
+    const sitterUser = await this.sitterUserFindOneById({ sitterUserId });
+
+    if (!sitterUser || sitterUser.userType !== 'SITTER') {
+      throw new UnprocessableEntityException('시터 유저를 찾을 수 없습니다.');
+    }
+
+    console.log(sitterUser);
+    const wantedGuId = sitterUser.wantedGues[0].id;
+
+    const wantedGu = await this.wantedGuService.findOneByWantedGuId({
+      wantedGuId,
+    });
+
+    if (!wantedGu) {
+      throw new UnprocessableEntityException('원하는 구를 찾을 수 없습니다.');
+    }
+
+    const parentsUsers = await this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoin('user.wantedGues', 'wantedGu')
+      .leftJoinAndSelect('user.careTypes', 'careType')
+      .leftJoinAndSelect('user.userChildTypes', 'userChildType')
+      .leftJoinAndSelect('user.childrens', 'children')
+      .where('user.userType = :userType', { userType: 'PARENTS' })
+      .andWhere('wantedGu.gu = :gu', { gu: wantedGu.gu.id })
+      .orderBy('user.createdAt', 'ASC')
+      .take(returnCount || 0)
+      .getMany();
+
+    const parentsUserIds = parentsUsers.map((parentsUser) => {
+      const parentsUserInfo = {
+        parentsUserId: parentsUser.id,
+        parentsUserCreatedAt: parentsUser.createdAt,
+        parentsUserChildren: parentsUser.childrens,
+        parentsUserCareType: parentsUser.careTypes,
+      };
+      return parentsUserInfo;
+    });
+
+    const result = parentsUserIds.map((el) => ({
+      parentsUserId: el.parentsUserId,
+      parentsUserCreatedAt: el.parentsUserCreatedAt,
+      parentsUserChildren: el.parentsUserChildren.map(
+        (children) => children.birth
+      ),
+      parentsUserCareTypeNames: el.parentsUserCareType.map(
+        (careType) => careType.name
       ),
     }));
 
