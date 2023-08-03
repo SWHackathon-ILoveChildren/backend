@@ -4,7 +4,11 @@ import { ChildrenService } from '../children/children.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { STATUS_TYPE_ENUM } from './types/status.type';
-import { CreateCareReturn } from './interfaces/cares.interface';
+import {
+  CreateCareReturn,
+  GetCareReceivedReturn,
+  ICareServiceGetCareReceived,
+} from './interfaces/cares.interface';
 import { Care } from './entities/care.entity';
 import { ProfilesService } from '../profiles/profiles.service';
 
@@ -19,7 +23,10 @@ export class CaresService {
     private profilesService: ProfilesService
   ) {}
 
-  async getCareReceived({ parentsUserId, returnCount }) {
+  async getCareReceived({
+    parentsUserId,
+    returnCount,
+  }: ICareServiceGetCareReceived): Promise<GetCareReceivedReturn[]> {
     const parentsUserProfile =
       await this.profilesService.findOneByParentsUserId({ parentsUserId });
 

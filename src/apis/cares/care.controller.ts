@@ -14,7 +14,10 @@ import {
   CreateCaresByParentsUserDto,
   CreateCaresBySitterUserDto,
 } from './dto/createCares.dto';
-import { CreateCareReturn } from './interfaces/cares.interface';
+import {
+  CreateCareReturn,
+  GetCareReceivedReturn,
+} from './interfaces/cares.interface';
 
 @Controller('cares')
 export class CaresController {
@@ -29,7 +32,7 @@ export class CaresController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    // type:
+    type: [GetCareReceivedReturn],
   })
   @ApiResponse({
     status: 422,
@@ -38,7 +41,7 @@ export class CaresController {
   getCareReceived(
     @Param('parentsUserId') parentsUserId: string,
     @Query('returnCount') returnCount: number
-  ) {
+  ): Promise<GetCareReceivedReturn[]> {
     return this.careservice.getCareReceived({ parentsUserId, returnCount });
   }
 
