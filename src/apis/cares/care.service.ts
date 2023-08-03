@@ -200,6 +200,9 @@ export class CaresService {
       { id: care.id },
       { careStatus: STATUS_TYPE_ENUM.CANCEL }
     );
+
+    await this.caresRepository.softDelete(care.id);
+
     return '돌봄 신청 상태로 업데이트 성공';
   }
 }

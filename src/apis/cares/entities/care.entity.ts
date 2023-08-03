@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   CreateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -64,6 +65,13 @@ export class Care {
   @IsDate()
   @CreateDateColumn()
   createdAt: Date;
+
+  @ApiProperty({
+    example: null,
+  })
+  @IsDate()
+  @DeleteDateColumn({ nullable: true })
+  deletedAt?: Date;
 
   @ApiProperty({
     type: () => Children,
