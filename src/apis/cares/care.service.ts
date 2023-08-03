@@ -19,7 +19,7 @@ export class CaresService {
     private profilesService: ProfilesService
   ) {}
 
-  async create({
+  async createByParentsUser({
     parentsUserId,
     ...createCaresDto
   }): Promise<CreateCareReturn> {

@@ -36,7 +36,10 @@ export class CaresController {
     @Param('parentsUserId', ParseUUIDPipe) parentsUserId: string, //
     @Body() createCaresDto: CreateCaresByParentsUserDto
   ): Promise<CreateCareReturn> {
-    return this.careservice.create({ parentsUserId, ...createCaresDto });
+    return this.careservice.createByParentsUser({
+      parentsUserId,
+      ...createCaresDto,
+    });
   }
 
   @Post('/sitters/:sitterUserId')
