@@ -121,21 +121,21 @@ export class FetchSitterUserReturn extends PickType(fetchBestSitterUserReturn, [
   @ApiProperty({
     example: '강남구',
   })
-  sitterUserwantedGu: string;
+  sitterUserWantedGu: string;
 
   @ApiProperty({
     example: 3,
   })
-  sitterUsercareCounting: number;
+  sitterUserCareCounting: number;
 
   @ApiProperty({
     example:
       'https://storage.googleapis.com/karuru-storage/2023-08-02/5b677e6d-5cf0-49f1-bb6a-c42db0e62e35/3.png',
   })
-  sitterUserimage: string;
+  sitterUserImage: string;
 
   @ApiProperty({
     example: '안녕하세요. 홍길동입니다.',
   })
-  sitterUserintroduction: string;
+  sitterUserIntroduction: string;
 }

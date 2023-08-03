@@ -124,11 +124,11 @@ export class UsersService {
 
     const result = {
       sitterUserId: sitter.id,
-      sitterUserwantedGu: sitter.wantedGues[0].gu.name,
+      sitterUserWantedGu: sitter.wantedGues[0].gu.name,
       sitterUserName: sitter.name,
-      sitterUsercareCounting: sitterProfile.careCounting,
-      sitterUserimage: sitter.images[0].url,
-      sitterUserintroduction: sitter.introduction,
+      sitterUserCareCounting: sitterProfile.careCounting,
+      sitterUserImage: sitter.images[0].url,
+      sitterUserIntroduction: sitter.introduction,
       sitterUserCareTypeNames: sitterInfo[0].careType,
       sitterUserChildTypeNames: sitterInfo[0].ChildType,
     };
