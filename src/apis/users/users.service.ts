@@ -90,7 +90,9 @@ export class UsersService {
   }
 
   async findOneBysitterUserId({ sitterUserId }) {
-    const sitterProfile = await this.profilesService.findOne({ sitterUserId });
+    const sitterProfile = await this.profilesService.findOneBySitterUserId({
+      sitterUserId,
+    });
     console.log(sitterProfile);
 
     const sitter = await this.usersRepository.findOne({
