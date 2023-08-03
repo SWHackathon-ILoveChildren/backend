@@ -2,10 +2,10 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { ChildrenService } from '../children/children.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Care } from './entities/care.entity';
 import { Repository } from 'typeorm';
 import { STATUS_TYPE_ENUM } from './types/status.type';
 import { CreateCareReturn } from './interfaces/cares.interface';
+import { Care } from './entities/care.entity';
 
 @Injectable()
 export class CaresService {
@@ -80,5 +80,27 @@ export class CaresService {
     };
 
     return result;
+  }
+
+  async updateToCompleteCare({ careId }: { careId: string }) {
+    const care = await this.caresRepository.findOne({
+      where: {
+        id: careId,
+      },
+      relations: ['sitterUser'],
+    });
+
+    console.log(care);
+
+    if (!care)
+      throw new UnprocessableEntityException('돌봄 정보가 올바르지 않습니다.');
+
+    if (care.careStatus !== 'SCHEDULE') {
+      throw new UnprocessableEntityException(
+        'SCHEDULE 상태의 돌봄 신청만 COMPLETE 상태로 수정할 수 있습니다.'
+      );
+    }
+
+    // const sitterProfile = await this.
   }
 }

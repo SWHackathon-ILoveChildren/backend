@@ -47,8 +47,8 @@ export class CaresController {
     status: 422,
     description: '업데이트 실패',
   })
-  @Put('complete/:id')
-  completeCare(@Param('careId', ParseUUIDPipe) caredId: string) {
-    // return this.careservice.updateToCompleteCare({ caredId });
+  @Put('complete/:careId')
+  completeCare(@Param('careId', ParseUUIDPipe) careId: string) {
+    return this.careservice.updateToCompleteCare({ careId });
   }
 }
