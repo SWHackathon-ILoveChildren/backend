@@ -20,6 +20,16 @@ export class ProfilesService {
     });
   }
 
+  async findOneByParentsUserId({ parentsUserId }) {
+    return await this.profileRepository.findOne({
+      where: {
+        user: {
+          id: parentsUserId,
+        },
+      },
+    });
+  }
+
   async addSitterUser({ sitterUserId }) {
     await this.profileRepository.save({
       user: {
