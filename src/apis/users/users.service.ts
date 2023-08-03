@@ -136,7 +136,7 @@ export class UsersService {
     return result;
   }
 
-  findOneByParentsUserId({ parentsUserId }) {
+  async findOneByParentsUserId({ parentsUserId }) {
     const parentsProfile = await this.profilesService.findOneByParentsUserId({
       parentsUserId,
     });
@@ -311,6 +311,8 @@ export class UsersService {
       guId: wantedGu.id,
       userId: user.id,
     });
+
+    await this.profilesService.addParentsUser({ parentsUserId: user.id });
 
     return user;
   }
