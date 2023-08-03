@@ -14,6 +14,7 @@ import { ChildTypeModule } from './apis/childTypes/childType.module';
 import { UserChildTypesModule } from './apis/userChildType/userChileTypes.module';
 import { FilesModule } from './apis/files/files.module';
 import { ImagesModule } from './apis/images/images.module';
+import { ProfilesModule } from './apis/profiles/profiles.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ImagesModule } from './apis/images/images.module';
     FilesModule,
     GuModule,
     ImagesModule,
+    ProfilesModule,
     UsersModule,
     UserChildTypesModule,
     WantedGuModule,
