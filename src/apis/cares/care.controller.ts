@@ -82,4 +82,21 @@ export class CaresController {
   completeCare(@Param('careId', ParseUUIDPipe) careId: string) {
     return this.careservice.updateToCompleteCare({ careId });
   }
+
+  @ApiOperation({
+    summary: '돌봄 취소 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '업데이트 성공',
+    type: String,
+  })
+  @ApiResponse({
+    status: 422,
+    description: '업데이트 실패',
+  })
+  @Put('cancel/:careId')
+  cancelCare(@Param('careId', ParseUUIDPipe) careId: string): Promise<string> {
+    return this.careservice.updateToCancel({ careId });
+  }
 }
