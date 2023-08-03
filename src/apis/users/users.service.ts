@@ -15,6 +15,7 @@ import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
 import {
+  FetchSitterUserReturn,
   FetchUserPhoneNumReturn,
   IUsersServiceParentsFindBySitterUserId,
   IUsersServiceParentsFindBySitterUserIdReturn,
@@ -84,6 +85,52 @@ export class UsersService {
     const result = {
       id: user.id,
       phoneNum: user.phoneNum,
+    };
+
+    return result;
+  }
+
+  async findOneBysitterUserId({
+    sitterUserId,
+  }: {
+    sitterUserId: string;
+  }): Promise<FetchSitterUserReturn> {
+    const sitterProfile = await this.profilesService.findOneBySitterUserId({
+      sitterUserId,
+    });
+
+    const sitter = await this.usersRepository.findOne({
+      where: {
+        id: sitterUserId,
+      },
+      relations: [
+        'wantedGues',
+        'wantedGues.gu',
+        'careTypes',
+        'userChildTypes',
+        'userChildTypes.childTypes',
+        'images',
+      ],
+    });
+
+    const sitterArrary = [sitter];
+
+    const sitterInfo = sitterArrary.map((el) => ({
+      careType: el.careTypes.map((careType) => careType.name),
+      ChildType: el.userChildTypes.map(
+        (childType) => childType.childTypes.name
+      ),
+    }));
+
+    const result = {
+      sitterUserId: sitter.id,
+      sitterUserWantedGu: sitter.wantedGues[0].gu.name,
+      sitterUserName: sitter.name,
+      sitterUserCareCounting: sitterProfile.careCounting,
+      sitterUserImage: sitter.images[0].url,
+      sitterUserIntroduction: sitter.introduction,
+      sitterUserCareTypeNames: sitterInfo[0].careType,
+      sitterUserChildTypeNames: sitterInfo[0].ChildType,
     };
 
     return result;

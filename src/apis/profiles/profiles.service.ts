@@ -10,6 +10,16 @@ export class ProfilesService {
     private profileRepository: Repository<Profile>
   ) {}
 
+  async findOneBySitterUserId({ sitterUserId }) {
+    return await this.profileRepository.findOne({
+      where: {
+        user: {
+          id: sitterUserId,
+        },
+      },
+    });
+  }
+
   async addSitterUser({ sitterUserId }) {
     await this.profileRepository.save({
       user: {

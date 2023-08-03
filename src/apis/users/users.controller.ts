@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateParentsDto } from './dto/createParents.dto';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
@@ -7,6 +15,7 @@ import {
   CreateSitterUsers,
   FetchNearbyJobsReturn,
   FetchParentsUsersReturn,
+  FetchSitterUserReturn,
   FetchSitterUsersReturn,
   FetchUserPhoneNumReturn,
   FetchUserReturn,
@@ -54,7 +63,28 @@ export class UsersController {
     return this.usersService.findOneByUserId({ userId });
   }
 
-  @Get('/sitters/:parentsUserId')
+  @Get('/sitters/:sitterUserId')
+  @ApiOperation({
+    summary: '시니어시터 개별 조회 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    type: FetchSitterUserReturn,
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  fetchSitterUser(
+    @Param('sitterUserId', ParseUUIDPipe) sitterUserId: string
+  ): Promise<FetchSitterUserReturn> {
+    return this.usersService.findOneBysitterUserId({
+      sitterUserId,
+    });
+  }
+
+  @Get('/sitters/recommend/:parentsUserId')
   @ApiOperation({
     summary: '지역 추천 시니어 시터 조회 API',
     description:
@@ -106,7 +136,7 @@ export class UsersController {
     });
   }
 
-  @Get('/parents/:sitterUserId')
+  @Get('/parents/recommend/:sitterUserId')
   @ApiOperation({
     summary: '주변 돌봄 일자리 조회 API',
     description: 'returnCount에 3 입력하면, 주변 돌봄 일자리 3개 조회 가능',

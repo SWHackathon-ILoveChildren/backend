@@ -111,3 +111,31 @@ export class FetchNearbyJobsReturn {
 export class IUsersServiceParentsFindBySitterUserIdReturn extends FetchNearbyJobsReturn {}
 
 export class FetchParentsUsersReturn extends FetchNearbyJobsReturn {}
+
+export class FetchSitterUserReturn extends PickType(fetchBestSitterUserReturn, [
+  'sitterUserId',
+  'sitterUserName',
+  'sitterUserCareTypeNames',
+  'sitterUserChildTypeNames',
+] as const) {
+  @ApiProperty({
+    example: '강남구',
+  })
+  sitterUserWantedGu: string;
+
+  @ApiProperty({
+    example: 3,
+  })
+  sitterUserCareCounting: number;
+
+  @ApiProperty({
+    example:
+      'https://storage.googleapis.com/karuru-storage/2023-08-02/5b677e6d-5cf0-49f1-bb6a-c42db0e62e35/3.png',
+  })
+  sitterUserImage: string;
+
+  @ApiProperty({
+    example: '안녕하세요. 홍길동입니다.',
+  })
+  sitterUserIntroduction: string;
+}
