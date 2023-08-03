@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseUUIDPipe,
   Post,
@@ -17,6 +18,24 @@ import { CreateCareReturn } from './interfaces/cares.interface';
 @Controller('cares')
 export class CaresController {
   constructor(private careservice: CaresService) {}
+
+  @Get('/parents/careReceived/:parentsUserId')
+  @ApiOperation({
+    summary: '돌봄 받은 내역 목록 조회',
+    description: '최신순으로 3개 조회',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    // type:
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  getCareReceived(@Param('parentsUserId') parentsUserId: string) {
+    return this.careservice.getCareReceived({ parentsUserId });
+  }
 
   @Post('/parents/:parentsUserId')
   @ApiOperation({
