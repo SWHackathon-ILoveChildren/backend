@@ -136,6 +136,12 @@ export class UsersService {
     return result;
   }
 
+  findOneByParentsUserId({ parentsUserId }) {
+    const parentsProfile = await this.profilesService.findOneByParentsUserId({
+      parentsUserId,
+    });
+  }
+
   async sitterFindByParentsUserId({
     parentsUserId,
     returnCount,

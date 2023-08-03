@@ -99,7 +99,7 @@ export class UsersController {
   })
   fetchParentsUser(
     @Param('parentsUserId', ParseUUIDPipe) parentsUserId: string
-  ): Promise<FetchSitterUserReturn> {
+  ) {
     return this.usersService.findOneByParentsUserId({
       parentsUserId,
     });
