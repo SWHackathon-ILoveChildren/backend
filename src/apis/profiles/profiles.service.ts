@@ -60,4 +60,19 @@ export class ProfilesService {
       await this.profileRepository.save(sitterProfile);
     }
   }
+
+  async addCareCountingByParentsUserId({ parentsUserId }) {
+    const parentsProfile = await this.profileRepository.findOne({
+      where: {
+        user: {
+          id: parentsUserId,
+        },
+      },
+    });
+
+    if (parentsProfile) {
+      parentsProfile.careCounting += 1;
+      await this.profileRepository.save(parentsProfile);
+    }
+  }
 }
