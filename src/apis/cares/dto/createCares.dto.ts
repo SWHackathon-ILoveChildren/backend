@@ -32,3 +32,16 @@ export class CreateCaresByParentsUserDto extends PickType(Care, [
   @IsString()
   contactPhoneNumber?: string;
 }
+
+export class CreateCaresBySitterUserDto extends PickType(
+  CreateCaresByParentsUserDto,
+  ['date', 'startTime', 'endTime', 'contactPhoneNumber'] as const
+) {
+  @ApiProperty({
+    example: '0dc011aa-d76e-11ed-afa1-0242ac120002',
+    required: true,
+  })
+  @IsUUID()
+  @IsNotEmpty()
+  parentsUserId: string;
+}
