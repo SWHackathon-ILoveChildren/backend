@@ -15,9 +15,10 @@ import { CreateCareReturn } from './interfaces/cares.interface';
 export class CaresController {
   constructor(private careservice: CaresService) {}
 
-  @Post(':parentsUserId')
+  @Post('/parents/:parentsUserId')
   @ApiOperation({
-    summary: '돌봄 신청 API',
+    summary: '부모 유저가 신청하는 돌봄 신청 API',
+    description: '시니어시터 유저 소개페이지의 신청 API입니다.',
   })
   @ApiResponse({
     status: 201,
@@ -28,7 +29,7 @@ export class CaresController {
     status: 422,
     description: '생성 실패',
   })
-  createCare(
+  createCareByParentsUser(
     @Param('parentsUserId', ParseUUIDPipe) parentsUserId: string, //
     @Body() createCaresDto: CreateCaresDto
   ): Promise<CreateCareReturn> {
