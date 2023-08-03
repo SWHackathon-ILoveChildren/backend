@@ -96,7 +96,7 @@ export class CaresController {
     description: '업데이트 실패',
   })
   @Put('cancel/:careId')
-  cancelCare(@Param('careId', ParseUUIDPipe) careId: string) {
+  cancelCare(@Param('careId', ParseUUIDPipe) careId: string): Promise<string> {
     return this.careservice.updateToCancel({ careId });
   }
 }

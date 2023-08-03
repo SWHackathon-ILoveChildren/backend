@@ -178,4 +178,28 @@ export class CaresService {
 
     return '돌봄 완료 상태로 업데이트 성공';
   }
+
+  async updateToCancel({ careId }: { careId: string }): Promise<string> {
+    const care = await this.caresRepository.findOne({
+      where: {
+        id: careId,
+      },
+      relations: ['sitterUser', 'parentsUser'],
+    });
+
+    if (!care)
+      throw new UnprocessableEntityException('돌봄 정보가 올바르지 않습니다.');
+
+    if (care.careStatus !== 'SCHEDULE') {
+      throw new UnprocessableEntityException(
+        'SCHEDULE 상태의 돌봄 신청만 CANCEL 상태로 수정할 수 있습니다.'
+      );
+    }
+
+    await this.caresRepository.update(
+      { id: care.id },
+      { careStatus: STATUS_TYPE_ENUM.CANCEL }
+    );
+    return '돌봄 신청 상태로 업데이트 성공';
+  }
 }
