@@ -60,7 +60,10 @@ export class CaresController {
     @Param('sitterUserId', ParseUUIDPipe) sitterUserId: string,
     @Body() createCaresDto: CreateCaresBySitterUserDto
   ) {
-    // return this.careservice
+    return this.careservice.createBySitterUser({
+      sitterUserId,
+      createCaresDto,
+    });
   }
 
   @ApiOperation({

@@ -84,6 +84,55 @@ export class CaresService {
     return result;
   }
 
+  async createBySitterUser({ sitterUserId, createCaresDto }) {
+    const { date, parentsUserId, contactPhoneNumber, ...rest } = createCaresDto;
+
+    const sitterUser = await this.usersService.sitterUserFindOneById({
+      sitterUserId,
+    });
+
+    if (sitterUser.phoneNum !== contactPhoneNumber) {
+      await this.usersService.updatePhoneNum({
+        userId: sitterUser.id,
+        phoneNum: contactPhoneNumber,
+      });
+    }
+
+    const parentsUser = await this.usersService.parentsUserFindOneById({
+      parentsUserId,
+    });
+
+    console.log('💛', parentsUser);
+
+    parentsUser.cares.map((care) => {
+      if (care.date === date)
+        throw new UnprocessableEntityException(
+          `${date} 날짜에는 돌봄 신청을 할 수 없습니다. 다른 날짜에 돌봄 신청을 해주세요.  `
+        );
+    });
+
+    let saveResult;
+    if (
+      parentsUser.userType === 'PARENTS' &&
+      sitterUser.userType === 'SITTER'
+    ) {
+      saveResult = await this.caresRepository.save({
+        ...rest,
+        date,
+        careStatus: STATUS_TYPE_ENUM.SCHEDULE,
+        sitterUser,
+        parentsUser,
+      });
+    } else {
+      throw new UnprocessableEntityException(
+        '부모 회원 또는 시니어시터 회원의 정보가 올바르지 않습니다.'
+      );
+    }
+
+    console.log(saveResult);
+    return saveResult;
+  }
+
   async updateToCompleteCare({ careId }: { careId: string }) {
     const care = await this.caresRepository.findOne({
       where: {
