@@ -19,6 +19,36 @@ export class CaresService {
     private profilesService: ProfilesService
   ) {}
 
+  async getCareReceived({ parentsUserId, returnCount }) {
+    const parentsUserProfile =
+      await this.profilesService.findOneByParentsUserId({ parentsUserId });
+
+    const caresRecevied = await this.caresRepository.find({
+      where: {
+        parentsUser: {
+          id: parentsUserId,
+        },
+        careStatus: STATUS_TYPE_ENUM.COMPLETE,
+      },
+      relations: ['sitterUser', 'parentsUser', 'children'],
+      order: {
+        date: 'DESC',
+      },
+      take: returnCount || undefined,
+    });
+
+    const result = caresRecevied.map((careRecevied) => ({
+      careId: careRecevied.id,
+      allCounting: parentsUserProfile.careCounting,
+      sitterName: careRecevied.sitterUser.name,
+      date: careRecevied.date,
+      startTime: careRecevied.startTime,
+      endTime: careRecevied.endTime,
+    }));
+
+    return result;
+  }
+
   async createByParentsUser({
     parentsUserId,
     ...createCaresDto
