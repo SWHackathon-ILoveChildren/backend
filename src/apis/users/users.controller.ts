@@ -54,7 +54,7 @@ export class UsersController {
     return this.usersService.findOneByUserId({ userId });
   }
 
-  @Get('/sitters/:parentsUserId')
+  @Get('/sitters/recommend/:parentsUserId')
   @ApiOperation({
     summary: '지역 추천 시니어 시터 조회 API',
     description:
@@ -106,7 +106,7 @@ export class UsersController {
     });
   }
 
-  @Get('/parents/:sitterUserId')
+  @Get('/parents/recommend/:sitterUserId')
   @ApiOperation({
     summary: '주변 돌봄 일자리 조회 API',
     description: 'returnCount에 3 입력하면, 주변 돌봄 일자리 3개 조회 가능',
