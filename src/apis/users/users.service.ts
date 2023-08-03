@@ -93,7 +93,6 @@ export class UsersService {
     const sitterProfile = await this.profilesService.findOneBySitterUserId({
       sitterUserId,
     });
-    console.log(sitterProfile);
 
     const sitter = await this.usersRepository.findOne({
       where: {
@@ -105,11 +104,31 @@ export class UsersService {
         'careTypes',
         'userChildTypes',
         'userChildTypes.childTypes',
+        'images',
       ],
     });
 
-    console.log(sitter);
-    return sitter;
+    const sitterArrary = [sitter];
+
+    const sitterInfo = sitterArrary.map((el) => ({
+      careType: el.careTypes.map((careType) => careType.name),
+      ChildType: el.userChildTypes.map(
+        (childType) => childType.childTypes.name
+      ),
+    }));
+
+    const result = {
+      id: sitter.id,
+      wantedGu: sitter.wantedGues[0].gu.name,
+      name: sitter.name,
+      careCounting: sitterProfile.careCounting,
+      image: sitter.images[0].url,
+      introduction: sitter.introduction,
+      careType: sitterInfo[0].careType,
+      childType: sitterInfo[0].ChildType,
+    };
+
+    return result;
   }
 
   async sitterFindByParentsUserId({
