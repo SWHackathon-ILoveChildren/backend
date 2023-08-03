@@ -92,9 +92,6 @@ export class CaresService {
       relations: ['sitterUser'],
     });
 
-    console.log(care);
-    console.log(care.sitterUser.id);
-
     if (!care)
       throw new UnprocessableEntityException('돌봄 정보가 올바르지 않습니다.');
 
@@ -108,13 +105,11 @@ export class CaresService {
       sitterUserId: care.sitterUser.id,
     });
 
-    console.log('!!!!!!!!!!');
-
-    const aaa = await this.caresRepository.update(
+    await this.caresRepository.update(
       { id: care.id },
       { careStatus: STATUS_TYPE_ENUM.COMPLETE }
     );
 
-    console.log(aaa);
+    return '돌봄 완료 상태로 업데이트 성공';
   }
 }

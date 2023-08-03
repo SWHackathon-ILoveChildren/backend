@@ -41,7 +41,7 @@ export class CaresController {
   @ApiResponse({
     status: 200,
     description: '업데이트 성공',
-    // type:
+    type: String,
   })
   @ApiResponse({
     status: 422,
