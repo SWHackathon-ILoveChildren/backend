@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { STATUS_TYPE_ENUM } from '../types/status.type';
-import { CreateCaresDto } from '../dto/createCares.dto';
+import { CreateCaresByParentsUserDto } from '../dto/createCares.dto';
 
 export class ICareServiceCreate {
   @ApiProperty({
@@ -8,7 +8,7 @@ export class ICareServiceCreate {
   })
   parentsUserId: string;
 
-  createCaresDto: CreateCaresDto;
+  createCaresDto: CreateCaresByParentsUserDto;
 }
 
 export class CreateCareReturn {

@@ -2,7 +2,7 @@ import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Care } from '../entities/care.entity';
 import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
-export class CreateCaresDto extends PickType(Care, [
+export class CreateCaresByParentsUserDto extends PickType(Care, [
   'date',
   'startTime',
   'endTime',

@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CaresService } from './care.service';
-import { CreateCaresDto } from './dto/createCares.dto';
+import { CreateCaresByParentsUserDto } from './dto/createCares.dto';
 import { CreateCareReturn } from './interfaces/cares.interface';
 
 @Controller('cares')
@@ -31,7 +31,7 @@ export class CaresController {
   })
   createCareByParentsUser(
     @Param('parentsUserId', ParseUUIDPipe) parentsUserId: string, //
-    @Body() createCaresDto: CreateCaresDto
+    @Body() createCaresDto: CreateCaresByParentsUserDto
   ): Promise<CreateCareReturn> {
     return this.careservice.create({ parentsUserId, ...createCaresDto });
   }
