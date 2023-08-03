@@ -84,7 +84,10 @@ export class CaresService {
     return result;
   }
 
-  async createBySitterUser({ sitterUserId, createCaresDto }) {
+  async createBySitterUser({
+    sitterUserId,
+    createCaresDto,
+  }): Promise<CreateCareReturn> {
     const { date, parentsUserId, contactPhoneNumber, ...rest } = createCaresDto;
 
     const sitterUser = await this.usersService.sitterUserFindOneById({

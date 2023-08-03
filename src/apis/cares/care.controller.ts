@@ -50,7 +50,7 @@ export class CaresController {
   @ApiResponse({
     status: 201,
     description: '신청 성공',
-    // type: ,
+    type: CreateCareReturn,
   })
   @ApiResponse({
     status: 422,
@@ -59,7 +59,7 @@ export class CaresController {
   createCareBySitterUser(
     @Param('sitterUserId', ParseUUIDPipe) sitterUserId: string,
     @Body() createCaresDto: CreateCaresBySitterUserDto
-  ) {
+  ): Promise<CreateCareReturn> {
     return this.careservice.createBySitterUser({
       sitterUserId,
       createCaresDto,
