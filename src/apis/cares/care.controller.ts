@@ -1,4 +1,11 @@
-import { Body, Controller, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CaresService } from './care.service';
 import { CreateCaresDto } from './dto/createCares.dto';
@@ -26,5 +33,22 @@ export class CaresController {
     @Body() createCaresDto: CreateCaresDto
   ): Promise<CreateCareReturn> {
     return this.careservice.create({ parentsUserId, ...createCaresDto });
+  }
+
+  @ApiOperation({
+    summary: '돌봄 완료 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '업데이트 성공',
+    type: String,
+  })
+  @ApiResponse({
+    status: 422,
+    description: '업데이트 실패',
+  })
+  @Put('complete/:careId')
+  completeCare(@Param('careId', ParseUUIDPipe) careId: string) {
+    return this.careservice.updateToCompleteCare({ careId });
   }
 }

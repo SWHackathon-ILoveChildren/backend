@@ -19,13 +19,13 @@ export class Profile {
   @ApiProperty({
     example: '3',
   })
-  @Column()
+  @Column({ default: 0 })
   careCounting: number;
 
   @ApiProperty({
     example: '5',
   })
-  @Column()
+  @Column({ default: 0 })
   worryAnswerCounting: number;
 
   @JoinColumn()

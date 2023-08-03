@@ -2,10 +2,11 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { ChildrenService } from '../children/children.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Care } from './entities/care.entity';
 import { Repository } from 'typeorm';
 import { STATUS_TYPE_ENUM } from './types/status.type';
 import { CreateCareReturn } from './interfaces/cares.interface';
+import { Care } from './entities/care.entity';
+import { ProfilesService } from '../profiles/profiles.service';
 
 @Injectable()
 export class CaresService {
@@ -14,7 +15,8 @@ export class CaresService {
     private caresRepository: Repository<Care>,
 
     private usersService: UsersService,
-    private childrensService: ChildrenService
+    private childrensService: ChildrenService,
+    private profilesService: ProfilesService
   ) {}
 
   async create({
@@ -80,5 +82,34 @@ export class CaresService {
     };
 
     return result;
+  }
+
+  async updateToCompleteCare({ careId }: { careId: string }) {
+    const care = await this.caresRepository.findOne({
+      where: {
+        id: careId,
+      },
+      relations: ['sitterUser'],
+    });
+
+    if (!care)
+      throw new UnprocessableEntityException('돌봄 정보가 올바르지 않습니다.');
+
+    if (care.careStatus !== 'SCHEDULE') {
+      throw new UnprocessableEntityException(
+        'SCHEDULE 상태의 돌봄 신청만 COMPLETE 상태로 수정할 수 있습니다.'
+      );
+    }
+
+    await this.profilesService.addCareCounting({
+      sitterUserId: care.sitterUser.id,
+    });
+
+    await this.caresRepository.update(
+      { id: care.id },
+      { careStatus: STATUS_TYPE_ENUM.COMPLETE }
+    );
+
+    return '돌봄 완료 상태로 업데이트 성공';
   }
 }
