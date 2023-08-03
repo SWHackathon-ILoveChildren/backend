@@ -8,6 +8,7 @@ import { GuModule } from '../gu/gu.module';
 import { WantedGuModule } from '../wantedGu/watnedGu.module';
 import { CareTypesModule } from '../careType/careTypes.module';
 import { UserChildTypesModule } from '../userChildType/userChileTypes.module';
+import { ProfilesModule } from '../profiles/profiles.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserChildTypesModule } from '../userChildType/userChileTypes.module';
     WantedGuModule,
     CareTypesModule,
     UserChildTypesModule,
+    ProfilesModule,
   ],
   providers: [UsersService],
   controllers: [UsersController],

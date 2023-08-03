@@ -21,6 +21,7 @@ import {
   IUsersServiceSitterFindByParentsUserId,
   IUsersServiceSitterFindByParentsUserIdReturn,
 } from './interfaces/users.interface';
+import { ProfilesService } from '../profiles/profiles.service';
 
 @Injectable()
 export class UsersService {
@@ -32,7 +33,8 @@ export class UsersService {
     private guService: GuService,
     private wantedGuService: WantedGuService,
     private careTypesService: CareTypesService,
-    private userChildTypesService: UserChildTypesService
+    private userChildTypesService: UserChildTypesService,
+    private profilesService: ProfilesService
   ) {}
 
   async parentsUserFindOneById({ parentsUserId }) {
@@ -306,6 +308,8 @@ export class UsersService {
       childTypeIds,
       userId: user.id,
     });
+
+    await this.profilesService.addSitterUser({ sitterUserId: user.id });
 
     return user;
   }
