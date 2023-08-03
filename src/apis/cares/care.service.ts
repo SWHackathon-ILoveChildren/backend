@@ -102,9 +102,11 @@ export class CaresService {
       parentsUserId,
     });
 
-    console.log('💛', parentsUser);
+    const parentsUserChildren = parentsUser.childrens.sort(
+      (a, b) => parseInt(a.birth, 10) - parseInt(b.birth, 10)
+    );
 
-    parentsUser.cares.map((care) => {
+    sitterUser.cares.map((care) => {
       if (care.date === date)
         throw new UnprocessableEntityException(
           `${date} 날짜에는 돌봄 신청을 할 수 없습니다. 다른 날짜에 돌봄 신청을 해주세요.  `
@@ -120,6 +122,7 @@ export class CaresService {
         ...rest,
         date,
         careStatus: STATUS_TYPE_ENUM.SCHEDULE,
+        children: parentsUserChildren[0].id,
         sitterUser,
         parentsUser,
       });
@@ -129,8 +132,15 @@ export class CaresService {
       );
     }
 
-    console.log(saveResult);
-    return saveResult;
+    const result = {
+      id: saveResult.id,
+      date: saveResult.date,
+      startTime: saveResult.startTime,
+      endTime: saveResult.endTime,
+      status: saveResult.careStatus,
+    };
+
+    return result;
   }
 
   async updateToCompleteCare({ careId }: { careId: string }) {

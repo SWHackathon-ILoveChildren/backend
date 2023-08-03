@@ -41,7 +41,7 @@ export class UsersService {
   async parentsUserFindOneById({ parentsUserId }) {
     const parentsUser = await this.usersRepository.findOne({
       where: { id: parentsUserId },
-      relations: ['wantedGues', 'careTypes', 'userChildTypes'],
+      relations: ['wantedGues', 'careTypes', 'userChildTypes', 'childrens'],
     });
 
     if (!parentsUser)
