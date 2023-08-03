@@ -65,7 +65,6 @@ export class UsersController {
   @Get('/sitters/:sitterUserId')
   @ApiOperation({
     summary: '시니어시터 개별 조회 API',
-    description: 'returnCount에 1 입력하면, 시니어시터 개별 조회 가능',
   })
   @ApiResponse({
     status: 200,
@@ -76,13 +75,9 @@ export class UsersController {
     status: 422,
     description: '조회 실패',
   })
-  fetchSitterUser(
-    @Param('sitterUserId', ParseUUIDPipe) sitterUserId: string,
-    @Query('returnCount') returnCount: number
-  ) {
+  fetchSitterUser(@Param('sitterUserId', ParseUUIDPipe) sitterUserId: string) {
     return this.usersService.findOneBysitterUserId({
       sitterUserId,
-      returnCount,
     });
   }
 

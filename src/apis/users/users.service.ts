@@ -89,6 +89,27 @@ export class UsersService {
     return result;
   }
 
+  async findOneBysitterUserId({ sitterUserId }) {
+    const sitterProfile = await this.profilesService.findOne({ sitterUserId });
+    console.log(sitterProfile);
+
+    const sitter = await this.usersRepository.findOne({
+      where: {
+        id: sitterUserId,
+      },
+      relations: [
+        'wantedGues',
+        'wantedGues.gu',
+        'careTypes',
+        'userChildTypes',
+        'userChildTypes.childTypes',
+      ],
+    });
+
+    console.log(sitter);
+    return sitter;
+  }
+
   async sitterFindByParentsUserId({
     parentsUserId,
     returnCount,
