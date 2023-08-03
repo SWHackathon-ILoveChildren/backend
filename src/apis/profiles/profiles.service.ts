@@ -38,6 +38,14 @@ export class ProfilesService {
     });
   }
 
+  async addParentsUser({ parentsUserId }) {
+    await this.profileRepository.save({
+      user: {
+        id: parentsUserId,
+      },
+    });
+  }
+
   async addCareCounting({ sitterUserId }) {
     const sitterProfile = await this.profileRepository.findOne({
       where: {
