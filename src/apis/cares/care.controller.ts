@@ -36,6 +36,26 @@ export class CaresController {
     return this.careservice.create({ parentsUserId, ...createCaresDto });
   }
 
+  @Post('/sitters/:sitterUserId')
+  @ApiOperation({
+    summary: '시니어시터 유저가 신청하는 돌봄 신청 API',
+    description: '부모 유저 소개페이지의 신청 API입니다.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: '신청 성공',
+    // type: ,
+  })
+  @ApiResponse({
+    status: 422,
+    description: '생성 실패',
+  })
+  createCareBySitterUser(
+    @Param('sitterUserId', ParseUUIDPipe) sitterUserId: string
+  ) {
+    // return this.careservice
+  }
+
   @ApiOperation({
     summary: '돌봄 완료 API',
   })
