@@ -15,6 +15,7 @@ import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
 import {
+  FetchParentsUserReturn,
   FetchSitterUserReturn,
   FetchUserPhoneNumReturn,
   IUsersServiceParentsFindBySitterUserId,
@@ -131,6 +132,43 @@ export class UsersService {
       sitterUserIntroduction: sitter.introduction,
       sitterUserCareTypeNames: sitterInfo[0].careType,
       sitterUserChildTypeNames: sitterInfo[0].ChildType,
+    };
+
+    return result;
+  }
+
+  async findOneByParentsUserId({
+    parentsUserId,
+  }: {
+    parentsUserId: string;
+  }): Promise<FetchParentsUserReturn> {
+    const parentsProfile = await this.profilesService.findOneByParentsUserId({
+      parentsUserId,
+    });
+
+    const parents = await this.usersRepository.findOne({
+      where: {
+        id: parentsUserId,
+      },
+      relations: ['wantedGues.gu', 'childrens', 'careTypes'],
+    });
+
+    const parentsArrary = [parents];
+
+    const parentsInfo = parentsArrary.map((el) => ({
+      children: el.childrens
+        .sort((a, b) => parseInt(a.birth, 10) - parseInt(b.birth, 10))
+        .map((children) => children.birth),
+      careType: el.careTypes.map((careType) => careType.name),
+    }));
+
+    const result = {
+      parentsUserId: parents.id,
+      parentsUserWantedGu: parents.wantedGues[0].gu.name,
+      parentsUserCareCounting: parentsProfile.careCounting,
+      parentsUserChildrenBirth: parentsInfo[0].children[0],
+      parentsUserIntroduction: parents.introduction,
+      parentsUserCareTypeNames: parentsInfo[0].careType,
     };
 
     return result;
@@ -305,6 +343,8 @@ export class UsersService {
       guId: wantedGu.id,
       userId: user.id,
     });
+
+    await this.profilesService.addParentsUser({ parentsUserId: user.id });
 
     return user;
   }

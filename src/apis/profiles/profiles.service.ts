@@ -20,10 +20,28 @@ export class ProfilesService {
     });
   }
 
+  async findOneByParentsUserId({ parentsUserId }) {
+    return await this.profileRepository.findOne({
+      where: {
+        user: {
+          id: parentsUserId,
+        },
+      },
+    });
+  }
+
   async addSitterUser({ sitterUserId }) {
     await this.profileRepository.save({
       user: {
         id: sitterUserId,
+      },
+    });
+  }
+
+  async addParentsUser({ parentsUserId }) {
+    await this.profileRepository.save({
+      user: {
+        id: parentsUserId,
       },
     });
   }
@@ -40,6 +58,21 @@ export class ProfilesService {
     if (sitterProfile) {
       sitterProfile.careCounting += 1;
       await this.profileRepository.save(sitterProfile);
+    }
+  }
+
+  async addCareCountingByParentsUserId({ parentsUserId }) {
+    const parentsProfile = await this.profileRepository.findOne({
+      where: {
+        user: {
+          id: parentsUserId,
+        },
+      },
+    });
+
+    if (parentsProfile) {
+      parentsProfile.careCounting += 1;
+      await this.profileRepository.save(parentsProfile);
     }
   }
 }

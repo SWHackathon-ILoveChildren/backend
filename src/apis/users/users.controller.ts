@@ -14,6 +14,7 @@ import {
   CreateParentsUsers,
   CreateSitterUsers,
   FetchNearbyJobsReturn,
+  FetchParentsUserReturn,
   FetchParentsUsersReturn,
   FetchSitterUserReturn,
   FetchSitterUsersReturn,
@@ -81,6 +82,27 @@ export class UsersController {
   ): Promise<FetchSitterUserReturn> {
     return this.usersService.findOneBysitterUserId({
       sitterUserId,
+    });
+  }
+
+  @Get('/parents/:parentsUserId')
+  @ApiOperation({
+    summary: '부모 개별 조회 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    type: FetchParentsUserReturn,
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  fetchParentsUser(
+    @Param('parentsUserId', ParseUUIDPipe) parentsUserId: string
+  ): Promise<FetchParentsUserReturn> {
+    return this.usersService.findOneByParentsUserId({
+      parentsUserId,
     });
   }
 
