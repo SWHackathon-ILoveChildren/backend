@@ -36,7 +36,7 @@ export class CaresController {
   }
 
   @ApiOperation({
-    summary: '돌봄 신청 API',
+    summary: '돌봄 완료 API',
   })
   @ApiResponse({
     status: 200,

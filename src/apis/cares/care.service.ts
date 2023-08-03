@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { STATUS_TYPE_ENUM } from './types/status.type';
 import { CreateCareReturn } from './interfaces/cares.interface';
 import { Care } from './entities/care.entity';
+import { ProfilesService } from '../profiles/profiles.service';
 
 @Injectable()
 export class CaresService {
@@ -14,7 +15,8 @@ export class CaresService {
     private caresRepository: Repository<Care>,
 
     private usersService: UsersService,
-    private childrensService: ChildrenService
+    private childrensService: ChildrenService,
+    private profilesService: ProfilesService
   ) {}
 
   async create({
@@ -91,6 +93,7 @@ export class CaresService {
     });
 
     console.log(care);
+    console.log(care.sitterUser.id);
 
     if (!care)
       throw new UnprocessableEntityException('돌봄 정보가 올바르지 않습니다.');
@@ -101,6 +104,17 @@ export class CaresService {
       );
     }
 
-    // const sitterProfile = await this.
+    await this.profilesService.addCareCounting({
+      sitterUserId: care.sitterUser.id,
+    });
+
+    console.log('!!!!!!!!!!');
+
+    const aaa = await this.caresRepository.update(
+      { id: care.id },
+      { careStatus: STATUS_TYPE_ENUM.COMPLETE }
+    );
+
+    console.log(aaa);
   }
 }

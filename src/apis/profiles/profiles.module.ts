@@ -6,5 +6,6 @@ import { ProfilesService } from './profiles.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Profile])],
   providers: [ProfilesService],
+  exports: [ProfilesService],
 })
 export class ProfilesModule {}
