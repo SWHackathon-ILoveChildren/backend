@@ -139,3 +139,28 @@ export class FetchSitterUserReturn extends PickType(fetchBestSitterUserReturn, [
   })
   sitterUserIntroduction: string;
 }
+
+export class FetchParentsUserReturn extends PickType(FetchNearbyJobsReturn, [
+  'parentsUserId',
+  'parentsUserCareTypeNames',
+] as const) {
+  @ApiProperty({
+    example: '강남구',
+  })
+  parentsUserWantedGu: string;
+
+  @ApiProperty({
+    example: 3,
+  })
+  parentsUserCareCounting: number;
+
+  @ApiProperty({
+    example: '202111',
+  })
+  parentsUserChildrenBirth: string;
+
+  @ApiProperty({
+    example: '안녕하세요. 홍길동입니다.',
+  })
+  parentsUserIntroduction: string;
+}

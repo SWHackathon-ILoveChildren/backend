@@ -15,6 +15,7 @@ import { CareTypesService } from '../careType/careTypes.service';
 import { CHILD_TYPE_ENUM } from './types/child.type';
 import { UserChildTypesService } from '../userChildType/userChileTypes.service';
 import {
+  FetchParentsUserReturn,
   FetchSitterUserReturn,
   FetchUserPhoneNumReturn,
   IUsersServiceParentsFindBySitterUserId,
@@ -136,7 +137,11 @@ export class UsersService {
     return result;
   }
 
-  async findOneByParentsUserId({ parentsUserId }) {
+  async findOneByParentsUserId({
+    parentsUserId,
+  }: {
+    parentsUserId: string;
+  }): Promise<FetchParentsUserReturn> {
     const parentsProfile = await this.profilesService.findOneByParentsUserId({
       parentsUserId,
     });
@@ -162,8 +167,8 @@ export class UsersService {
       parentsUserWantedGu: parents.wantedGues[0].gu.name,
       parentsUserCareCounting: parentsProfile.careCounting,
       parentsUserChildrenBirth: parentsInfo[0].children[0],
-      parentsUserIntroductio: parents.introduction,
-      parentsUseCareTypeNames: parentsInfo[0].careType,
+      parentsUserIntroduction: parents.introduction,
+      parentsUserCareTypeNames: parentsInfo[0].careType,
     };
 
     return result;
