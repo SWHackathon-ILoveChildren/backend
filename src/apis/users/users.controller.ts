@@ -15,6 +15,7 @@ import {
   CreateSitterUsers,
   FetchNearbyJobsReturn,
   FetchParentsUsersReturn,
+  FetchSitterUserReturn,
   FetchSitterUsersReturn,
   FetchUserPhoneNumReturn,
   FetchUserReturn,
@@ -69,13 +70,15 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    // type:
+    type: FetchSitterUserReturn,
   })
   @ApiResponse({
     status: 422,
     description: '조회 실패',
   })
-  fetchSitterUser(@Param('sitterUserId', ParseUUIDPipe) sitterUserId: string) {
+  fetchSitterUser(
+    @Param('sitterUserId', ParseUUIDPipe) sitterUserId: string
+  ): Promise<FetchSitterUserReturn> {
     return this.usersService.findOneBysitterUserId({
       sitterUserId,
     });
