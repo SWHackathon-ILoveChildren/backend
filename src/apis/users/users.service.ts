@@ -140,6 +140,33 @@ export class UsersService {
     const parentsProfile = await this.profilesService.findOneByParentsUserId({
       parentsUserId,
     });
+
+    const parents = await this.usersRepository.findOne({
+      where: {
+        id: parentsUserId,
+      },
+      relations: ['wantedGues.gu', 'childrens', 'careTypes'],
+    });
+
+    const parentsArrary = [parents];
+
+    const parentsInfo = parentsArrary.map((el) => ({
+      children: el.childrens
+        .sort((a, b) => parseInt(a.birth, 10) - parseInt(b.birth, 10))
+        .map((children) => children.birth),
+      careType: el.careTypes.map((careType) => careType.name),
+    }));
+
+    const result = {
+      parentsUserId: parents.id,
+      parentsUserWantedGu: parents.wantedGues[0].gu.name,
+      parentsUserCareCounting: parentsProfile.careCounting,
+      parentsUserChildrenBirth: parentsInfo[0].children[0],
+      parentsUserIntroductio: parents.introduction,
+      parentsUseCareTypeNames: parentsInfo[0].careType,
+    };
+
+    return result;
   }
 
   async sitterFindByParentsUserId({
