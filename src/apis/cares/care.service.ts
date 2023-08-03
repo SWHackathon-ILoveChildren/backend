@@ -151,7 +151,7 @@ export class CaresService {
       where: {
         id: careId,
       },
-      relations: ['sitterUser'],
+      relations: ['sitterUser', 'parentsUser'],
     });
 
     if (!care)
@@ -165,6 +165,10 @@ export class CaresService {
 
     await this.profilesService.addCareCounting({
       sitterUserId: care.sitterUser.id,
+    });
+
+    await this.profilesService.addCareCountingByParentsUserId({
+      parentsUserId: care.parentsUser.id,
     });
 
     await this.caresRepository.update(
