@@ -8,16 +8,20 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CaresService } from './care.service';
-import { CreateCaresDto } from './dto/createCares.dto';
+import {
+  CreateCaresByParentsUserDto,
+  CreateCaresBySitterUserDto,
+} from './dto/createCares.dto';
 import { CreateCareReturn } from './interfaces/cares.interface';
 
 @Controller('cares')
 export class CaresController {
   constructor(private careservice: CaresService) {}
 
-  @Post(':parentsUserId')
+  @Post('/parents/:parentsUserId')
   @ApiOperation({
-    summary: '돌봄 신청 API',
+    summary: '부모 유저가 신청하는 돌봄 신청 API',
+    description: '시니어시터 유저 소개페이지의 신청 API입니다.',
   })
   @ApiResponse({
     status: 201,
@@ -28,11 +32,38 @@ export class CaresController {
     status: 422,
     description: '생성 실패',
   })
-  createCare(
+  createCareByParentsUser(
     @Param('parentsUserId', ParseUUIDPipe) parentsUserId: string, //
-    @Body() createCaresDto: CreateCaresDto
+    @Body() createCaresDto: CreateCaresByParentsUserDto
   ): Promise<CreateCareReturn> {
-    return this.careservice.create({ parentsUserId, ...createCaresDto });
+    return this.careservice.createByParentsUser({
+      parentsUserId,
+      ...createCaresDto,
+    });
+  }
+
+  @Post('/sitters/:sitterUserId')
+  @ApiOperation({
+    summary: '시니어시터 유저가 신청하는 돌봄 신청 API',
+    description: '부모 유저 소개페이지의 신청 API입니다.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: '신청 성공',
+    type: CreateCareReturn,
+  })
+  @ApiResponse({
+    status: 422,
+    description: '생성 실패',
+  })
+  createCareBySitterUser(
+    @Param('sitterUserId', ParseUUIDPipe) sitterUserId: string,
+    @Body() createCaresDto: CreateCaresBySitterUserDto
+  ): Promise<CreateCareReturn> {
+    return this.careservice.createBySitterUser({
+      sitterUserId,
+      createCaresDto,
+    });
   }
 
   @ApiOperation({

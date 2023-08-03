@@ -19,7 +19,7 @@ export class CaresService {
     private profilesService: ProfilesService
   ) {}
 
-  async create({
+  async createByParentsUser({
     parentsUserId,
     ...createCaresDto
   }): Promise<CreateCareReturn> {
@@ -66,6 +66,68 @@ export class CaresService {
         children,
         parentsUser,
         sitterUser,
+      });
+    } else {
+      throw new UnprocessableEntityException(
+        '부모 회원 또는 시니어시터 회원의 정보가 올바르지 않습니다.'
+      );
+    }
+
+    const result = {
+      id: saveResult.id,
+      date: saveResult.date,
+      startTime: saveResult.startTime,
+      endTime: saveResult.endTime,
+      status: saveResult.careStatus,
+    };
+
+    return result;
+  }
+
+  async createBySitterUser({
+    sitterUserId,
+    createCaresDto,
+  }): Promise<CreateCareReturn> {
+    const { date, parentsUserId, contactPhoneNumber, ...rest } = createCaresDto;
+
+    const sitterUser = await this.usersService.sitterUserFindOneById({
+      sitterUserId,
+    });
+
+    if (sitterUser.phoneNum !== contactPhoneNumber) {
+      await this.usersService.updatePhoneNum({
+        userId: sitterUser.id,
+        phoneNum: contactPhoneNumber,
+      });
+    }
+
+    const parentsUser = await this.usersService.parentsUserFindOneById({
+      parentsUserId,
+    });
+
+    const parentsUserChildren = parentsUser.childrens.sort(
+      (a, b) => parseInt(a.birth, 10) - parseInt(b.birth, 10)
+    );
+
+    sitterUser.cares.map((care) => {
+      if (care.date === date)
+        throw new UnprocessableEntityException(
+          `${date} 날짜에는 돌봄 신청을 할 수 없습니다. 다른 날짜에 돌봄 신청을 해주세요.  `
+        );
+    });
+
+    let saveResult;
+    if (
+      parentsUser.userType === 'PARENTS' &&
+      sitterUser.userType === 'SITTER'
+    ) {
+      saveResult = await this.caresRepository.save({
+        ...rest,
+        date,
+        careStatus: STATUS_TYPE_ENUM.SCHEDULE,
+        children: parentsUserChildren[0].id,
+        sitterUser,
+        parentsUser,
       });
     } else {
       throw new UnprocessableEntityException(
