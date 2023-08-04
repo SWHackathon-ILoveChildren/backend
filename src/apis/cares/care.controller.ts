@@ -187,6 +187,31 @@ export class CaresController {
     return this.careservice.getCareRequested({ sitterUserId, returnCount });
   }
 
+  @Get('/sitter/careRequestedByParents/all/:sitterUserId')
+  @ApiOperation({
+    summary: '돌봄 한 내역 전체 목록 조회(부모가 신청한 내역 조회)',
+    description: 'returnCount을 입력하지 않으면, 최신순으로 전체 조회 가능',
+  })
+  @ApiQuery({ name: 'returnCount', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    type: [GetCareRequestedReturn],
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  getCareRequestedAllByParents(
+    @Param('sitterUserId') sitterUserId: string,
+    @Query('returnCount') returnCount: number
+  ): Promise<GetCareRequestedReturn[]> {
+    return this.careservice.getCareRequestedByParents({
+      sitterUserId,
+      returnCount,
+    });
+  }
+
   @Post('/parents/:parentsUserId')
   @ApiOperation({
     summary: '부모 유저가 신청하는 돌봄 신청 API',
