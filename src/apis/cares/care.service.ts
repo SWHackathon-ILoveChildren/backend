@@ -38,7 +38,6 @@ export class CaresService {
         parentsUser: {
           id: parentsUserId,
         },
-        careStatus: STATUS_TYPE_ENUM.COMPLETE,
         whoApplied: USER_TYPE_ENUM.PARENTS,
       },
       relations: ['sitterUser', 'parentsUser', 'children'],
@@ -55,6 +54,7 @@ export class CaresService {
       date: careRecevied.date,
       startTime: careRecevied.startTime,
       endTime: careRecevied.endTime,
+      status: careRecevied.careStatus,
     }));
 
     return result;
@@ -72,7 +72,6 @@ export class CaresService {
         parentsUser: {
           id: parentsUserId,
         },
-        careStatus: STATUS_TYPE_ENUM.COMPLETE,
         whoApplied: USER_TYPE_ENUM.SITTER,
       },
       relations: ['sitterUser', 'parentsUser', 'children'],
@@ -89,6 +88,7 @@ export class CaresService {
       date: careRecevied.date,
       startTime: careRecevied.startTime,
       endTime: careRecevied.endTime,
+      status: careRecevied.careStatus,
     }));
 
     return result;

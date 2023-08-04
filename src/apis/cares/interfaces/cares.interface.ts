@@ -64,6 +64,11 @@ export class GetCareReceivedReturn extends PickType(CreateCareReturn, [
     example: '홍길동',
   })
   sitterName: string;
+
+  @ApiProperty({
+    example: 'SCHEDULE',
+  })
+  status: string;
 }
 
 export class GetCareRequestedReturn extends GetCareReceivedReturn {}
