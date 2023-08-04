@@ -106,6 +106,23 @@ export class UsersController {
     });
   }
 
+  @Get('/all')
+  @ApiOperation({
+    summary: '전체 유저 조회 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    // type:
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  fethchUsers() {
+    return this.usersService.findAllUsers();
+  }
+
   @Get('/sitters/recommend/:parentsUserId')
   @ApiOperation({
     summary: '지역 추천 시니어 시터 조회 API',
