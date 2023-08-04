@@ -20,6 +20,7 @@ import {
   FetchSitterUsersReturn,
   FetchUserPhoneNumReturn,
   FetchUserReturn,
+  FethchUsersReturn,
   fetchBestSitterUserReturn,
 } from './interfaces/users.interface';
 import { CreateSittersDto } from './dto/createSitters.dto';
@@ -104,6 +105,23 @@ export class UsersController {
     return this.usersService.findOneByParentsUserId({
       parentsUserId,
     });
+  }
+
+  @Get('/find/allUsers')
+  @ApiOperation({
+    summary: '전체 유저 조회 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    type: [FethchUsersReturn],
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  fethchUsers(): Promise<FethchUsersReturn[]> {
+    return this.usersService.findAllUsers();
   }
 
   @Get('/sitters/recommend/:parentsUserId')
