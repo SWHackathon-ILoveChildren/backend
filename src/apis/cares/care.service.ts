@@ -4,7 +4,11 @@ import { ChildrenService } from '../children/children.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { STATUS_TYPE_ENUM } from './types/status.type';
-import { CreateCareReturn } from './interfaces/cares.interface';
+import {
+  CreateCareReturn,
+  GetCareReceivedReturn,
+  ICareServiceGetCareReceived,
+} from './interfaces/cares.interface';
 import { Care } from './entities/care.entity';
 import { ProfilesService } from '../profiles/profiles.service';
 
@@ -18,6 +22,39 @@ export class CaresService {
     private childrensService: ChildrenService,
     private profilesService: ProfilesService
   ) {}
+
+  async getCareReceived({
+    parentsUserId,
+    returnCount,
+  }: ICareServiceGetCareReceived): Promise<GetCareReceivedReturn[]> {
+    const parentsUserProfile =
+      await this.profilesService.findOneByParentsUserId({ parentsUserId });
+
+    const caresRecevied = await this.caresRepository.find({
+      where: {
+        parentsUser: {
+          id: parentsUserId,
+        },
+        careStatus: STATUS_TYPE_ENUM.COMPLETE,
+      },
+      relations: ['sitterUser', 'parentsUser', 'children'],
+      order: {
+        date: 'DESC',
+      },
+      take: returnCount || undefined,
+    });
+
+    const result = caresRecevied.map((careRecevied) => ({
+      careId: careRecevied.id,
+      allCounting: parentsUserProfile.careCounting,
+      sitterName: careRecevied.sitterUser.name,
+      date: careRecevied.date,
+      startTime: careRecevied.startTime,
+      endTime: careRecevied.endTime,
+    }));
+
+    return result;
+  }
 
   async createByParentsUser({
     parentsUserId,

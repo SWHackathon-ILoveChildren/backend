@@ -1,22 +1,49 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseUUIDPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { CaresService } from './care.service';
 import {
   CreateCaresByParentsUserDto,
   CreateCaresBySitterUserDto,
 } from './dto/createCares.dto';
-import { CreateCareReturn } from './interfaces/cares.interface';
+import {
+  CreateCareReturn,
+  GetCareReceivedReturn,
+} from './interfaces/cares.interface';
 
 @Controller('cares')
 export class CaresController {
   constructor(private careservice: CaresService) {}
+
+  @Get('/parents/careReceived/:parentsUserId')
+  @ApiOperation({
+    summary: '돌봄 받은 내역 목록 조회',
+    description: 'returnCount에 3 입력하면, 최신순으로 3개 조회',
+  })
+  @ApiQuery({ name: 'returnCount', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    type: [GetCareReceivedReturn],
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  getCareReceived(
+    @Param('parentsUserId') parentsUserId: string,
+    @Query('returnCount') returnCount: number
+  ): Promise<GetCareReceivedReturn[]> {
+    return this.careservice.getCareReceived({ parentsUserId, returnCount });
+  }
 
   @Post('/parents/:parentsUserId')
   @ApiOperation({
