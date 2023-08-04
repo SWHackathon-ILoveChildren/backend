@@ -164,3 +164,14 @@ export class FetchParentsUserReturn extends PickType(FetchNearbyJobsReturn, [
   })
   parentsUserIntroduction: string;
 }
+
+export class FethchUsersReturn extends PickType(User, [
+  'id',
+  'name',
+  'introduction',
+  'password',
+  'phoneNum',
+  'userType',
+  'contactPhoneNumber',
+  'createdAt',
+] as const) {}

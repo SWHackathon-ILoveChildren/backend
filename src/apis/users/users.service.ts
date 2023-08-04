@@ -18,6 +18,7 @@ import {
   FetchParentsUserReturn,
   FetchSitterUserReturn,
   FetchUserPhoneNumReturn,
+  FethchUsersReturn,
   IUsersServiceParentsFindBySitterUserId,
   IUsersServiceParentsFindBySitterUserIdReturn,
   IUsersServiceSitterFindByParentsUserId,
@@ -89,6 +90,10 @@ export class UsersService {
     };
 
     return result;
+  }
+
+  async findAllUsers(): Promise<FethchUsersReturn[]> {
+    return await this.usersRepository.find();
   }
 
   async findOneBysitterUserId({
