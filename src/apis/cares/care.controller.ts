@@ -55,7 +55,7 @@ export class CaresController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    type: [GetCareRequestedReturn],
+    type: [GetCareReceivedReturn],
   })
   @ApiResponse({
     status: 422,
@@ -64,7 +64,7 @@ export class CaresController {
   getCareReceivedBySitter(
     @Param('parentsUserId') parentsUserId: string,
     @Query('returnCount') returnCount: number
-  ): Promise<GetCareRequestedReturn[]> {
+  ): Promise<GetCareReceivedReturn[]> {
     return this.careservice.getCareReceivedBySitter({
       parentsUserId,
       returnCount,
@@ -80,7 +80,7 @@ export class CaresController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    // type:
+    type: [GetCareRequestedReturn],
   })
   @ApiResponse({
     status: 422,
@@ -89,7 +89,7 @@ export class CaresController {
   getCareRequested(
     @Param('sitterUserId') sitterUserId: string,
     @Query('returnCount') returnCount: number
-  ) {
+  ): Promise<GetCareRequestedReturn[]> {
     return this.careservice.getCareRequested({ sitterUserId, returnCount });
   }
 
@@ -124,7 +124,7 @@ export class CaresController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    type: [GetCareRequestedReturn],
+    type: [GetCareReceivedReturn],
   })
   @ApiResponse({
     status: 422,
@@ -133,7 +133,7 @@ export class CaresController {
   getCareReceivedAllBySitter(
     @Param('parentsUserId') parentsUserId: string,
     @Query('returnCount') returnCount: number
-  ): Promise<GetCareRequestedReturn[]> {
+  ): Promise<GetCareReceivedReturn[]> {
     return this.careservice.getCareReceivedBySitter({
       parentsUserId,
       returnCount,

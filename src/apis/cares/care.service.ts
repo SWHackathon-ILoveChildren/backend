@@ -60,7 +60,10 @@ export class CaresService {
     return result;
   }
 
-  async getCareRequested({ sitterUserId, returnCount }) {
+  async getCareRequested({
+    sitterUserId,
+    returnCount,
+  }: ICareServiceGetCareRequested): Promise<GetCareRequestedReturn[]> {
     const sitterUserProfile = await this.profilesService.findOneBySitterUserId({
       sitterUserId,
     });
@@ -100,7 +103,7 @@ export class CaresService {
   async getCareReceivedBySitter({
     parentsUserId,
     returnCount,
-  }: ICareServiceGetCareRequested): Promise<GetCareRequestedReturn[]> {
+  }: ICareServiceGetCareReceived): Promise<GetCareReceivedReturn[]> {
     const parentsUserProfile =
       await this.profilesService.findOneByParentsUserId({ parentsUserId });
 
