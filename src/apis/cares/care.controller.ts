@@ -17,6 +17,7 @@ import {
 import {
   CreateCareReturn,
   GetCareReceivedReturn,
+  GetCareRequestedReturn,
 } from './interfaces/cares.interface';
 
 @Controller('cares')
@@ -54,7 +55,7 @@ export class CaresController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    type: [GetCareReceivedReturn],
+    type: [GetCareRequestedReturn],
   })
   @ApiResponse({
     status: 422,
@@ -63,7 +64,7 @@ export class CaresController {
   getCareRequested(
     @Param('parentsUserId') parentsUserId: string,
     @Query('returnCount') returnCount: number
-  ): Promise<GetCareReceivedReturn[]> {
+  ): Promise<GetCareRequestedReturn[]> {
     return this.careservice.getCareRequested({ parentsUserId, returnCount });
   }
 
