@@ -134,6 +134,46 @@ export class CaresService {
     return result;
   }
 
+  async getCareRequestedByParents({
+    sitterUserId,
+    returnCount,
+  }: ICareServiceGetCareRequested): Promise<GetCareRequestedReturn[]> {
+    const sitterUserProfile = await this.profilesService.findOneBySitterUserId({
+      sitterUserId,
+    });
+
+    const wantedGu = await this.usersService.findOneBysitterUserId({
+      sitterUserId,
+    });
+
+    const caresRequested = await this.caresRepository.find({
+      where: {
+        sitterUser: {
+          id: sitterUserId,
+        },
+        whoApplied: USER_TYPE_ENUM.PARENTS,
+      },
+      relations: ['sitterUser', 'parentsUser', 'children'],
+      order: {
+        date: 'DESC',
+      },
+      take: returnCount || undefined,
+    });
+
+    const result = caresRequested.map((careRequested) => ({
+      careId: careRequested.id,
+      allCounting: sitterUserProfile.careCounting,
+      birth: careRequested.children.birth,
+      watedGu: wantedGu.sitterUserWantedGu,
+      date: careRequested.date,
+      startTime: careRequested.startTime,
+      endTime: careRequested.endTime,
+      status: careRequested.careStatus,
+    }));
+
+    return result;
+  }
+
   async createByParentsUser({
     parentsUserId,
     ...createCaresDto
