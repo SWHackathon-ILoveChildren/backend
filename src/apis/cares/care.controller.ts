@@ -17,6 +17,7 @@ import {
 import {
   CreateCareReturn,
   GetCareReceivedReturn,
+  GetCareRequestedReturn,
 } from './interfaces/cares.interface';
 
 @Controller('cares')
@@ -25,7 +26,7 @@ export class CaresController {
 
   @Get('/parents/careReceived/:parentsUserId')
   @ApiOperation({
-    summary: '돌봄 받은 내역 목록 조회',
+    summary: '돌봄 받은 내역 목록 조회(부모가 신청한 내역 조회)',
     description: 'returnCount에 3 입력하면, 최신순으로 3개 조회',
   })
   @ApiQuery({ name: 'returnCount', required: false, type: Number })
@@ -43,6 +44,28 @@ export class CaresController {
     @Query('returnCount') returnCount: number
   ): Promise<GetCareReceivedReturn[]> {
     return this.careservice.getCareReceived({ parentsUserId, returnCount });
+  }
+
+  @Get('/parents/careRequested/:parentsUserId')
+  @ApiOperation({
+    summary: '돌봄 받은 내역 목록 조회(시터님이 신청한 내역 조회)',
+    description: 'returnCount에 3 입력하면, 최신순으로 3개 조회',
+  })
+  @ApiQuery({ name: 'returnCount', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    type: [GetCareRequestedReturn],
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  getCareRequested(
+    @Param('parentsUserId') parentsUserId: string,
+    @Query('returnCount') returnCount: number
+  ): Promise<GetCareRequestedReturn[]> {
+    return this.careservice.getCareRequested({ parentsUserId, returnCount });
   }
 
   @Post('/parents/:parentsUserId')

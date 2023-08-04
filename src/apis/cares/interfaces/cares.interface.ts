@@ -16,6 +16,8 @@ export class ICareServiceGetCareReceived {
   returnCount?: number;
 }
 
+export class ICareServiceGetCareRequested extends ICareServiceGetCareReceived {}
+
 export class CreateCareReturn {
   @ApiProperty({
     example: 'c4b5617e-f8ce-4650-b50a-bb7e09b75ef2',
@@ -63,3 +65,5 @@ export class GetCareReceivedReturn extends PickType(CreateCareReturn, [
   })
   sitterName: string;
 }
+
+export class GetCareRequestedReturn extends GetCareReceivedReturn {}

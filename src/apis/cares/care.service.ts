@@ -7,7 +7,9 @@ import { STATUS_TYPE_ENUM } from './types/status.type';
 import {
   CreateCareReturn,
   GetCareReceivedReturn,
+  GetCareRequestedReturn,
   ICareServiceGetCareReceived,
+  ICareServiceGetCareRequested,
 } from './interfaces/cares.interface';
 import { Care } from './entities/care.entity';
 import { ProfilesService } from '../profiles/profiles.service';
@@ -47,6 +49,40 @@ export class CaresService {
     });
 
     const result = caresRecevied.map((careRecevied) => ({
+      careId: careRecevied.id,
+      allCounting: parentsUserProfile.careCounting,
+      sitterName: careRecevied.sitterUser.name,
+      date: careRecevied.date,
+      startTime: careRecevied.startTime,
+      endTime: careRecevied.endTime,
+    }));
+
+    return result;
+  }
+
+  async getCareRequested({
+    parentsUserId,
+    returnCount,
+  }: ICareServiceGetCareRequested): Promise<GetCareRequestedReturn[]> {
+    const parentsUserProfile =
+      await this.profilesService.findOneByParentsUserId({ parentsUserId });
+
+    const caresRequested = await this.caresRepository.find({
+      where: {
+        parentsUser: {
+          id: parentsUserId,
+        },
+        careStatus: STATUS_TYPE_ENUM.COMPLETE,
+        whoApplied: USER_TYPE_ENUM.SITTER,
+      },
+      relations: ['sitterUser', 'parentsUser', 'children'],
+      order: {
+        date: 'DESC',
+      },
+      take: returnCount || undefined,
+    });
+
+    const result = caresRequested.map((careRecevied) => ({
       careId: careRecevied.id,
       allCounting: parentsUserProfile.careCounting,
       sitterName: careRecevied.sitterUser.name,
