@@ -37,6 +37,7 @@ export class CaresService {
           id: parentsUserId,
         },
         careStatus: STATUS_TYPE_ENUM.COMPLETE,
+        whoApplied: USER_TYPE_ENUM.PARENTS,
       },
       relations: ['sitterUser', 'parentsUser', 'children'],
       order: {
