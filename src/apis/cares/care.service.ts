@@ -11,6 +11,7 @@ import {
 } from './interfaces/cares.interface';
 import { Care } from './entities/care.entity';
 import { ProfilesService } from '../profiles/profiles.service';
+import { USER_TYPE_ENUM } from './types/user.type';
 
 @Injectable()
 export class CaresService {
@@ -103,6 +104,7 @@ export class CaresService {
         children,
         parentsUser,
         sitterUser,
+        whoApplied: USER_TYPE_ENUM.PARENTS,
       });
     } else {
       throw new UnprocessableEntityException(
@@ -165,6 +167,7 @@ export class CaresService {
         children: parentsUserChildren[0].id,
         sitterUser,
         parentsUser,
+        whoApplied: USER_TYPE_ENUM.SITTER,
       });
     } else {
       throw new UnprocessableEntityException(
