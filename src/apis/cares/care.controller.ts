@@ -65,7 +65,10 @@ export class CaresController {
     @Param('parentsUserId') parentsUserId: string,
     @Query('returnCount') returnCount: number
   ): Promise<GetCareRequestedReturn[]> {
-    return this.careservice.getCareRequested({ parentsUserId, returnCount });
+    return this.careservice.getCareReceivedBySitter({
+      parentsUserId,
+      returnCount,
+    });
   }
 
   @Get('/parents/careReceived/all/:parentsUserId')
@@ -109,7 +112,10 @@ export class CaresController {
     @Param('parentsUserId') parentsUserId: string,
     @Query('returnCount') returnCount: number
   ): Promise<GetCareRequestedReturn[]> {
-    return this.careservice.getCareRequested({ parentsUserId, returnCount });
+    return this.careservice.getCareReceivedBySitter({
+      parentsUserId,
+      returnCount,
+    });
   }
 
   @Post('/parents/:parentsUserId')

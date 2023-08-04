@@ -60,7 +60,7 @@ export class CaresService {
     return result;
   }
 
-  async getCareRequested({
+  async getCareReceivedBySitter({
     parentsUserId,
     returnCount,
   }: ICareServiceGetCareRequested): Promise<GetCareRequestedReturn[]> {
