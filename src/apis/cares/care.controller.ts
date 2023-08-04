@@ -61,7 +61,7 @@ export class CaresController {
     status: 422,
     description: '조회 실패',
   })
-  getCareRequested(
+  getCareReceivedBySitter(
     @Param('parentsUserId') parentsUserId: string,
     @Query('returnCount') returnCount: number
   ): Promise<GetCareRequestedReturn[]> {
@@ -105,7 +105,7 @@ export class CaresController {
     status: 422,
     description: '조회 실패',
   })
-  getCareRequestedAll(
+  getCareReceivedAllBySitter(
     @Param('parentsUserId') parentsUserId: string,
     @Query('returnCount') returnCount: number
   ): Promise<GetCareRequestedReturn[]> {
