@@ -46,9 +46,34 @@ export class CaresController {
     return this.careservice.getCareReceived({ parentsUserId, returnCount });
   }
 
-  @Get('/parents/careRequested/:parentsUserId')
+  @Get('/parents/careReceivedBySitter/:parentsUserId')
   @ApiOperation({
-    summary: '돌봄 받은 내역 목록 조회(시터님이 신청한 내역 조회)',
+    summary: '돌봄 받은 내역 목록 조회(시터가 신청한 내역 조회)',
+    description: 'returnCount에 3 입력하면, 최신순으로 3개 조회',
+  })
+  @ApiQuery({ name: 'returnCount', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    description: '조회 성공',
+    type: [GetCareReceivedReturn],
+  })
+  @ApiResponse({
+    status: 422,
+    description: '조회 실패',
+  })
+  getCareReceivedBySitter(
+    @Param('parentsUserId') parentsUserId: string,
+    @Query('returnCount') returnCount: number
+  ): Promise<GetCareReceivedReturn[]> {
+    return this.careservice.getCareReceivedBySitter({
+      parentsUserId,
+      returnCount,
+    });
+  }
+
+  @Get('/sitter/careRequested/:sitterUserId')
+  @ApiOperation({
+    summary: '돌봄 한 내역 목록 조회(시터가 신청한 내역 조회)',
     description: 'returnCount에 3 입력하면, 최신순으로 3개 조회',
   })
   @ApiQuery({ name: 'returnCount', required: false, type: Number })
@@ -62,10 +87,10 @@ export class CaresController {
     description: '조회 실패',
   })
   getCareRequested(
-    @Param('parentsUserId') parentsUserId: string,
+    @Param('sitterUserId') sitterUserId: string,
     @Query('returnCount') returnCount: number
   ): Promise<GetCareRequestedReturn[]> {
-    return this.careservice.getCareRequested({ parentsUserId, returnCount });
+    return this.careservice.getCareRequested({ sitterUserId, returnCount });
   }
 
   @Get('/parents/careReceived/all/:parentsUserId')
@@ -90,7 +115,7 @@ export class CaresController {
     return this.careservice.getCareReceived({ parentsUserId, returnCount });
   }
 
-  @Get('/parents/careRequested/all/:parentsUserId')
+  @Get('/parents/careReceivedBySitter/all/:parentsUserId')
   @ApiOperation({
     summary: '돌봄 받은 내역 전체 목록 조회(시터님이 신청한 내역 조회)',
     description: 'returnCount을 입력하지 않으면, 최신순으로 전체 조회 가능',
@@ -99,17 +124,20 @@ export class CaresController {
   @ApiResponse({
     status: 200,
     description: '조회 성공',
-    type: [GetCareRequestedReturn],
+    type: [GetCareReceivedReturn],
   })
   @ApiResponse({
     status: 422,
     description: '조회 실패',
   })
-  getCareRequestedAll(
+  getCareReceivedAllBySitter(
     @Param('parentsUserId') parentsUserId: string,
     @Query('returnCount') returnCount: number
-  ): Promise<GetCareRequestedReturn[]> {
-    return this.careservice.getCareRequested({ parentsUserId, returnCount });
+  ): Promise<GetCareReceivedReturn[]> {
+    return this.careservice.getCareReceivedBySitter({
+      parentsUserId,
+      returnCount,
+    });
   }
 
   @Post('/parents/:parentsUserId')

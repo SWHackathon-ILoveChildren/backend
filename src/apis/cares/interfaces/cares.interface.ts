@@ -16,7 +16,10 @@ export class ICareServiceGetCareReceived {
   returnCount?: number;
 }
 
-export class ICareServiceGetCareRequested extends ICareServiceGetCareReceived {}
+export class ICareServiceGetCareRequested {
+  sitterUserId: string;
+  returnCount?: number;
+}
 
 export class CreateCareReturn {
   @ApiProperty({
@@ -71,4 +74,21 @@ export class GetCareReceivedReturn extends PickType(CreateCareReturn, [
   status: string;
 }
 
-export class GetCareRequestedReturn extends GetCareReceivedReturn {}
+export class GetCareRequestedReturn extends PickType(GetCareReceivedReturn, [
+  'careId',
+  'allCounting',
+  'date',
+  'startTime',
+  'endTime',
+  'status',
+] as const) {
+  @ApiProperty({
+    example: '231105',
+  })
+  birth: string;
+
+  @ApiProperty({
+    example: '강남구',
+  })
+  watedGu: string;
+}
