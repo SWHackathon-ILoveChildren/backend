@@ -46,7 +46,7 @@ export class CaresController {
     return this.careservice.getCareReceived({ parentsUserId, returnCount });
   }
 
-  @Get('/parents/careRequested/:parentsUserId')
+  @Get('/parents/careReceivedBySitter/:parentsUserId')
   @ApiOperation({
     summary: '돌봄 받은 내역 목록 조회(시터님이 신청한 내역 조회)',
     description: 'returnCount에 3 입력하면, 최신순으로 3개 조회',
@@ -90,7 +90,7 @@ export class CaresController {
     return this.careservice.getCareReceived({ parentsUserId, returnCount });
   }
 
-  @Get('/parents/careRequested/all/:parentsUserId')
+  @Get('/parents/careReceivedBySitter/all/:parentsUserId')
   @ApiOperation({
     summary: '돌봄 받은 내역 전체 목록 조회(시터님이 신청한 내역 조회)',
     description: 'returnCount을 입력하지 않으면, 최신순으로 전체 조회 가능',
