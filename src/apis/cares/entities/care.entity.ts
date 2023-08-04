@@ -11,6 +11,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
 } from 'typeorm';
+import { USER_TYPE_ENUM } from '../types/user.type';
 
 @Entity()
 export class Care {
@@ -21,6 +22,16 @@ export class Care {
   @IsUUID()
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @ApiProperty({
+    example: 'PARENTS',
+    type: 'enum',
+    required: true,
+  })
+  @IsEnum(USER_TYPE_ENUM)
+  @IsNotEmpty()
+  @Column({ type: 'enum', enum: USER_TYPE_ENUM })
+  whoApplied: USER_TYPE_ENUM;
 
   @ApiProperty({
     example: '2023-07-28',
